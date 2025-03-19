@@ -1,0 +1,318 @@
+body {
+  font-family: 'Arial', sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0px;
+  letter-spacing: 0.5px;
+}
+img {
+  margin: 0px;
+}
+button.btn {
+  background-color: #fd7e14;
+  color: #fff;
+  border: 1px solid #fd7e14;
+}
+button.btn:hover {
+  background-color: #fff;
+  color: #fd7e14;
+  border: 1px solid #fd7e14;
+  transform: translateY(-1px);
+}
+.btn {
+  background-color: #fd7e14;
+  color: #fff;
+  border: 1px solid #fd7e14;
+}
+.btn:hover {
+  background-color: #fff;
+  color: #fd7e14;
+  border: 1px solid #fd7e14;
+  transform: translateY(-1px);
+}
+.bg-light {
+  background-color: #f9f9f9 !important;
+}
+.bg-primary {
+  background-color: #007bff !important;
+}
+.btn-primary {
+  background-color: #0056b3;
+}
+/*calculator css*/
+.calculator {
+  width: 300px;
+  margin: 50px auto;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+.display {
+  margin-bottom: 20px;
+}
+.display input {
+  font-size: 18px;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+.display .result {
+  text-align: right;
+  font-size: 20px;
+  color: #333;
+}
+.buttons .row {
+  display: flex;
+  justify-content: space-between;
+}
+.buttons button {
+  flex: 1;
+  margin: 5px;
+  padding: 15px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  background: #f0f0f0;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.buttons button:hover {
+  background: #ddd;
+}
+.equal {
+  width: 100%;
+  background: #007bff;
+  color: #fff;
+}
+.equal:hover {
+  background: #0056b3;
+}
+/*login page css*/
+.login-text {
+  color: #fd7e14;
+}
+.card {
+  border-radius: 1rem;
+  background: #fff;
+}
+.form-control,
+.form-select {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+.card {
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+/*timeline*/
+.timeline-slider-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px 0;
+}
+.timeline-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  margin: auto;
+}
+.timeline-slide-content {
+  text-align: center;
+}
+.timeline-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/*tictac game*/
+.square {
+  border: 1px solid #f6f6f6;
+  padding: 20px;
+  width: 50px;
+  height: 50px;
+}
+/*career page*/
+.career-hero {
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
+  h3 {
+    top: 45%;
+    left: 45%;
+  }
+}
+/*about me page*/
+.aboutme-hero {
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+.work-experience-hero{
+  img{
+    object-fit: cover;
+    object-position: center;
+  }
+}
+.aboutme-name{
+  min-width: 150px;
+}
+.about-work{
+  min-width: 260px;
+}
+.line-decor{
+  border: none;
+  height: 4px;
+  background-color: #fd7e14;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: max-content;
+  /* &::before, &::after{
+    content: '';
+    padding: 10px;
+    display: block;
+    width:10px;
+    height: 10px;
+    background-color: #fd7e14;
+    border-radius: 50%;
+  } */
+}
+.skill {
+  figure {
+    &:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+      div {
+        border: 1px solid #fd7e14;
+        box-shadow: 0 0rem 2rem rgba(253, 126, 20, 1) !important;
+      }
+    }
+    div {
+      min-height: 175px;
+    }
+
+    img {
+      width: 90px;
+      height: 90px;
+    }
+  }
+}
+.skill-tag{
+  p{
+    background-color: #ffe0c7;
+    padding: 3px 6px;
+    color: #fd7e14;
+    border-radius: 4px;
+    border: 1px solid;
+    &:hover{
+      background-color: #fff;
+    }
+  }
+}
+/*work experince section*/
+.work-experience-hero {
+  position: sticky;
+  top: 80px; 
+  height: calc(100vh - 80px); 
+  overflow: hidden;
+}
+.scroll-container {
+  height: calc(100vh - 80px); 
+  overflow-y: auto;
+  padding-right: 15px;
+  scroll-behavior: smooth;
+}
+.scroll-container {
+  scroll-snap-type: y mandatory;
+}
+.scroll-container > div {
+  scroll-snap-align: start;
+  padding-bottom: 20px;
+}
+
+/*Education page*/
+.path-card:hover {
+  background: linear-gradient(160deg, #fd7e14, #f79a4f) !important;
+}
+
+@media (min-width: 768px) {
+  .w-md-25 {
+    width: 25% !important;
+  }
+}
+/*Contact page*/
+.contact-info {
+  background: #fbf4ee;
+  border-radius: 10px;
+  h3 {
+    color: #ff6600;
+  }
+}
+.contact-form h3 {
+  color: #333;
+}
+.success-message {
+  background:#ffe0c7 ;
+  color: #fd7e14;
+  padding: 10px 20px;
+  margin: 0px 0px 30px 0px;
+  border-radius: 5px;
+  z-index: 999;
+  border: none;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+
+
+/*home page css*/
+/* Apply the font to your headings */
+.greeting {
+  font-size: 1.2rem;
+}
+.web-title {
+  font-size: 9rem;
+  font-weight: 500;
+  position: relative;
+  font-family: "Monigue", sans-serif;
+  letter-spacing:0.4rem
+}
+.photo-title {
+  font-size: 9rem;
+  font-weight: 500;
+  color: transparent;
+  -webkit-text-stroke: 2px #333;
+  font-family: "Monigue", sans-serif;
+  letter-spacing:0.4rem
+}
+.location {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
