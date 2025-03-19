@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/siddharthbudgude/siddharth-b.git/static/css/main.ad4b18c4.css",
-    "main.js": "/siddharthbudgude/siddharth-b.git/static/js/main.addcf88b.js",
-    "static/js/453.580549ae.chunk.js": "/siddharthbudgude/siddharth-b.git/static/js/453.580549ae.chunk.js",
-    "index.html": "/siddharthbudgude/siddharth-b.git/index.html",
-    "main.ad4b18c4.css.map": "/siddharthbudgude/siddharth-b.git/static/css/main.ad4b18c4.css.map",
-    "main.addcf88b.js.map": "/siddharthbudgude/siddharth-b.git/static/js/main.addcf88b.js.map",
-    "453.580549ae.chunk.js.map": "/siddharthbudgude/siddharth-b.git/static/js/453.580549ae.chunk.js.map"
+    "main.css": "/siddharthbudgude/siddharth-b/static/css/main.ad4b18c4.css",
+    "main.js": "/siddharthbudgude/siddharth-b/static/js/main.e0f1b002.js",
+    "static/js/453.580549ae.chunk.js": "/siddharthbudgude/siddharth-b/static/js/453.580549ae.chunk.js",
+    "index.html": "/siddharthbudgude/siddharth-b/index.html",
+    "main.ad4b18c4.css.map": "/siddharthbudgude/siddharth-b/static/css/main.ad4b18c4.css.map",
+    "main.e0f1b002.js.map": "/siddharthbudgude/siddharth-b/static/js/main.e0f1b002.js.map",
+    "453.580549ae.chunk.js.map": "/siddharthbudgude/siddharth-b/static/js/453.580549ae.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ad4b18c4.css",
-    "static/js/main.addcf88b.js"
+    "static/js/main.e0f1b002.js"
   ]
 }
