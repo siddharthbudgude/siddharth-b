@@ -21,7 +21,7 @@ export default function MyApp() {
   };
 
   return (
-    <Router>
+    // <Router>
       <div className="d-flex flex-column min-vh-100">
         <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
         
@@ -42,6 +42,6 @@ export default function MyApp() {
 
         <Footer />
       </div>
-    </Router>
+    // </Router>
   );
 }
