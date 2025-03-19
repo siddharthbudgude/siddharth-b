@@ -68,6 +68,7 @@ const skillsData = [
   {
     id: 11,
     image: '/images/magento-logo.png',
+    
     name: 'Magento2',
     category: 'cms',
   },

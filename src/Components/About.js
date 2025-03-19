@@ -24,7 +24,7 @@ function Aboutme() {
                         <div className="col-3">
                             <div className="">
                                 <figure className="">
-                                    <img src="/images/sidd.png" alt="developer" className="img-fluid figure-img" />
+                                    <img src={`${process.env.PUBLIC_URL}/images/sidd.png`} alt="developer" className="img-fluid figure-img" />
                                 </figure>
                             </div>
                         </div>
@@ -104,7 +104,7 @@ function Skills() {
                 <div className="d-flex flex-wrap">
                     <figure className="  w-50 w-md-25 p-2 h-100" >
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/html-logo.png" alt="skill-one" className="" />
+                            <img src={`${process.env.PUBLIC_URL}/images/html-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">HTML</figcaption>
                         </div>
                     </figure>
