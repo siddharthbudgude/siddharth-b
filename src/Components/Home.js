@@ -131,7 +131,7 @@ const Skills = () => {
 const HeroSection = () => {
   return (
     <section className="hero-section text-center py-5 ">
-      <p className="greeting">👋 My name is Siddharth and I am a freelancer</p>
+      <p className="greeting">👋 My name is Siddharth and I am a</p>
       <h1 className="web-title">Web-Designer</h1>
       <h2 className="photo-title"> & Developer</h2>
       <p className="location">Based in Pune, Maharastra.</p>
