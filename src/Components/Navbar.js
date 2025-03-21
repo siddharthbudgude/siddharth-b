@@ -11,7 +11,7 @@ const Navbar = () => {
         {/* Logo Section */}
         <a className="navbar-brand d-flex align-items-center" href="/">
           <img
-            src="/images/logo-t.png"
+            src={`${process.env.PUBLIC_URL}/images/logo-t.png`}
             alt="Company Logo"
             className="me-2" height="60"
           />
