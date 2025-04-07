@@ -94,32 +94,26 @@ const Skills = () => {
 
   return (
     <section id="skills" className='container'>
-      <h2>My Skills</h2>
-      <div style={{ marginBottom: '20px' }}>
-        <button onClick={() => handleFilter('all')}>All</button>
-        <button onClick={() => handleFilter('front-end')}>Front-end</button>
-        <button onClick={() => handleFilter('version-control')}>Version-Control</button>
-        <button onClick={() => handleFilter('designing')}>Designing</button>
-        <button onClick={() => handleFilter('cms')}>CMS</button>
+      <h2 className="mb-4 fw-bold fs-3">My Skills</h2>
+      <div className="d-flex gap-3 mb-2">
+        <button onClick={() => handleFilter('all')} className="btn">All</button>
+        <button onClick={() => handleFilter('front-end')} className="btn">Front-end</button>
+        <button onClick={() => handleFilter('version-control')} className="btn">Version-Control</button>
+        <button onClick={() => handleFilter('designing')} className="btn">Designing</button>
+        <button onClick={() => handleFilter('cms')} className="btn">CMS</button>
       </div>
       <div className='d-flex gap-3 py-3 align-items-center flex-wrap'>
         {filteredSkills.map((skill) => (
           <div
             key={skill.id}
-            // style={{
-            //   padding: '10px',
-            //   margin: '5px',
-            //   border: '1px solid #ccc',
-            //   borderRadius: '5px',
-            // }}
-            className='border p-3 rounded'
+            className='border p-3 rounded skil-item d-flex flex-column align-items-center gap-3'
           >
              <img
               src={skill.image}
               alt={skill.name}
               style={{ width: '50px', height: '50px', marginBottom: '5px', }}
             />
-            <span className='Skill-name fw-bold'>{skill.name}</span>
+            <span className='Skill-name'>{skill.name}</span>
           </div>
         ))}
       </div>
@@ -138,7 +132,7 @@ const HeroSection = () => {
       <div className="hero-buttons">
         <button className="btn btn-dark me-3">Need a Designer</button>
         <button className="btn btn-outline-dark me-3">Need a Developer</button>
-        <button className="btn btn-outline-dark me-3"><a href='/Resume'>Chekout My Resume</a></button>
+        <a href='/Resume' className="resume-home btn">Chekout My Resume</a>
       </div>
     </section>
   );
