@@ -330,3 +330,12 @@ button.btn:hover {
   cursor:pointer;
   box-shadow: 0px 0px 5px 1px #fd7e14;
 }
+
+@media only screen and (min-width:321px) and (max-width:768px){
+  .web-title {
+    font-size: 4rem;
+  }
+  .photo-title {
+    font-size: 4rem;
+  }
+}

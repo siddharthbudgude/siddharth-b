@@ -95,7 +95,7 @@ const Skills = () => {
   return (
     <section id="skills" className='container'>
       <h2 className="mb-4 fw-bold fs-3">My Skills</h2>
-      <div className="d-flex gap-3 mb-2">
+      <div className="d-flex gap-3 mb-2 overflow-auto">
         <button onClick={() => handleFilter('all')} className="btn">All</button>
         <button onClick={() => handleFilter('front-end')} className="btn">Front-end</button>
         <button onClick={() => handleFilter('version-control')} className="btn">Version-Control</button>
@@ -130,8 +130,8 @@ const HeroSection = () => {
       <h2 className="photo-title"> & Developer</h2>
       <p className="location">Based in Pune, Maharastra.</p>
       <div className="hero-buttons">
-        <button className="btn btn-dark me-3">Need a Designer</button>
-        <button className="btn btn-outline-dark me-3">Need a Developer</button>
+        <button className="btn btn-dark me-3 mb-4">Need a Designer</button>
+        <button className="btn btn-outline-dark me-3 mb-4">Need a Developer</button>
         <a href='/Resume' className="resume-home btn">Chekout My Resume</a>
       </div>
     </section>
