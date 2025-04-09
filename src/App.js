@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import './fonts.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import About from './Components/About';
 import User from './Components/User';

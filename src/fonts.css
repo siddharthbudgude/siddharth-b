@@ -1,0 +1,7 @@
+/* src/fonts.css */
+@font-face {
+  font-family: 'Monigue';
+  src: url('./assets/fonts/Monigue.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
