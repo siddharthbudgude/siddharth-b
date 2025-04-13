@@ -98,73 +98,73 @@ function Skills() {
                 <div className="d-flex flex-wrap">
                     <figure className="  w-50 w-md-25 p-2 h-100" >
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/html-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/html-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">HTML</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2 h-100">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/CSS-Logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/CSS-Logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">CSS</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2 h-100">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/Tailwind-css-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/Tailwind-css-logo.png`}  alt="skill-one" className="" />
                             <figcaption className="fw-bold">TAILWIND CSS</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2 h-100">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/bootstrap-5-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/bootstrap-5-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">BOOTSTRAPP</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2 h-100">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/javaScript-Logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/javaScript-Logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">JAVASCRIPT</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/jquery-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/jquery-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">JQUERY</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/React-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/React-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">REACT JS</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/Figma-Logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/Figma-Logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">FIGMA</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/canva-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/canva-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">CANVA</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/Wordpress-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/Wordpress-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">WORDPRESS</figcaption>
                         </div>
                     </figure>
                     <figure className="  w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/magento-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/magento-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">MAGENTO2</figcaption>
                         </div>
                     </figure>
                     <figure className="   w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src="/images/GitHub-logo.png" alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/GitHub-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">GITHUB</figcaption>
                         </div>
                     </figure>
