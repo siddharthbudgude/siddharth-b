@@ -45,8 +45,13 @@ function Hero() {
     return (
         <>
             <section className="career-hero">
-                <img
+                {/* <img
                     src="/images/eduaction-new.png"
+                    alt="Education banner"
+                    className="" width='100%' height='550px'
+                /> */}
+                 <img
+                    src={`${process.env.PUBLIC_URL}/images/eduaction-new.png`}
                     alt="Education banner"
                     className="" width='100%' height='550px'
                 />
