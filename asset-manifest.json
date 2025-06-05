@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/siddharth-b/static/css/main.ef077712.css",
-    "main.js": "/siddharth-b/static/js/main.e400215c.js",
+    "main.js": "/siddharth-b/static/js/main.6cb0ac1b.js",
     "static/js/453.580549ae.chunk.js": "/siddharth-b/static/js/453.580549ae.chunk.js",
     "static/media/Monigue.woff": "/siddharth-b/static/media/Monigue.22c873016e1ef50837ec.woff",
     "index.html": "/siddharth-b/index.html",
     "main.ef077712.css.map": "/siddharth-b/static/css/main.ef077712.css.map",
-    "main.e400215c.js.map": "/siddharth-b/static/js/main.e400215c.js.map",
+    "main.6cb0ac1b.js.map": "/siddharth-b/static/js/main.6cb0ac1b.js.map",
     "453.580549ae.chunk.js.map": "/siddharth-b/static/js/453.580549ae.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ef077712.css",
-    "static/js/main.e400215c.js"
+    "static/js/main.6cb0ac1b.js"
   ]
 }
