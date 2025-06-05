@@ -96,7 +96,7 @@ const Skills = () => {
     <section id="skills" className='container'>
       <h2 className="mb-4 fw-bold fs-3">My Skills</h2>
       <div className="d-flex gap-3 mb-2 overflow-auto">
-        <button onClick={() => handleFilter('all')} className="btn">All</button>
+        <button onClick={() => handleFilter('all')} className="btn w-100">All</button>
         <button onClick={() => handleFilter('front-end')} className="btn">Front-end</button>
         <button onClick={() => handleFilter('version-control')} className="btn">Version-Control</button>
         <button onClick={() => handleFilter('designing')} className="btn">Designing</button>
