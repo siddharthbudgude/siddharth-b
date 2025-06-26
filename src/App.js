@@ -9,7 +9,6 @@ import Calculator from './Components/Calculator';
 import Footer from './Components/Footer';
 import Navbar from './Components/Navbar';
 import Home from './Components/Home'; 
-import Ticktacgame from './Components/Tictacgame';
 import CareerPath from './Components/Careerpath';
 import Contact from './Components/Contact';
 import Resume from './Components/Resume';
@@ -33,7 +32,6 @@ export default function MyApp() {
             <Route path="/user" element={<User />} />
             <Route path="/successlogin" element={<Successlogin />} />
             <Route path="/calculator" element={<Calculator />} />
-            <Route path='/ticktacgame' element={<Ticktacgame/>} />
             <Route path='/careerpath' element={<CareerPath />}/>
             <Route path='/contact' element={<Contact />} />
             <Route path='/resume' element={<Resume />} />
