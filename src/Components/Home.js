@@ -176,17 +176,8 @@ export default function PortfolioPage() {
       <section id="projects" className="py-5">
         <div className="container">
           <h2 className="fw-bold text-center mb-4">Projects</h2>
-          <div className="row g-4">
-            {['Project 1', 'Project 2', 'Project 3', 'project4'].map((project, index) => (
-              <div key={index} className="col-md-4">
-                <div className="card h-100 shadow-sm">
-                  <div className="card-body">
-                    <h5 className="card-title fw-bold">{project}</h5>
-                    <p className="card-text">A description of what the project entails and the technologies used.</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div>
+            <a href='/Projectone'>Project one</a>
           </div>
         </div>
       </section>

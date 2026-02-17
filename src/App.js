@@ -12,6 +12,7 @@ import Home from './Components/Home';
 import CareerPath from './Components/Careerpath';
 import Contact from './Components/Contact';
 import Resume from './Components/Resume';
+import Portfolio from './Components/Portfolio';
 
 export default function MyApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,6 +36,7 @@ export default function MyApp() {
             <Route path='/careerpath' element={<CareerPath />}/>
             <Route path='/contact' element={<Contact />} />
             <Route path='/resume' element={<Resume />} />
+            <Route path='/portfolio' element={<Portfolio/>} />
           </Routes>
         </main>
 

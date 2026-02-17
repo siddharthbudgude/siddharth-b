@@ -63,7 +63,7 @@ const Navbar = () => {
               </ul>
             </li>
             <li className="nav-item mx-3">
-              <Link to="/portfolio" className="nav-link text-white" > Projects</Link>
+              <Link to="/portfolio" className="nav-link text-white" >Portfolio</Link>
             </li>
             <li className="nav-item mx-3 ">
               <Link to="/contact" className="nav-link text-white" >Contact</Link>
