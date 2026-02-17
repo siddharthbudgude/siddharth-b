@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quizzly — Interactive Quiz App</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff8f5;--surface:#fff;--surface2:#fff0eb;--border:rgba(220,80,40,.12);--border2:rgba(220,80,40,.22);
+  --text:#1e1208;--text-mid:#5e3a20;--text-muted:#b8906a;
+  --coral:#e84830;--coral-l:#f06040;--coral-bg:rgba(232,72,48,.08);--coral-bg2:rgba(232,72,48,.14);
+  --mint:#059669;--mint-bg:rgba(5,150,105,.1);
+  --sky:#0284c7;--sky-bg:rgba(2,132,199,.1);
+  --amber:#d97706;--amb-bg:rgba(217,119,6,.1);
+  --rose:#db2777;--rose-bg:rgba(219,39,119,.08);
+  --r:16px;--shadow:0 2px 16px rgba(232,72,48,.08);--shadow-md:0 8px 32px rgba(232,72,48,.14)
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.screen{width:100%;max-width:1200px;padding:2rem;display:none;animation:fadeIn .35s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* HOME SCREEN */
+.home-hero{text-align:center;padding:3rem 1rem 2rem}
+.home-hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--coral-bg2);color:var(--coral);font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:.35rem 1rem;border-radius:99px;margin-bottom:1rem}
+.home-hero h1{font-size:3rem;font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:.75rem}
+.home-hero h1 em{font-family:'Lora',serif;font-style:italic;color:var(--coral)}
+.home-hero p{color:var(--text-muted);font-size:1rem;max-width:480px;margin:0 auto 2rem}
+.home-stats{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.hstat{text-align:center}
+.hstat strong{display:block;font-size:1.5rem;font-weight:900;color:var(--coral)}
+.hstat span{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted)}
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
+.cat-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:1.4rem;cursor:pointer;transition:all .25s;text-align:center;position:relative;overflow:hidden}
+.cat-card:hover{border-color:var(--coral);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.cat-card.selected{border-color:var(--coral);background:var(--coral-bg2)}
+.cat-emoji{font-size:2.5rem;margin-bottom:.6rem}
+.cat-title{font-size:1rem;font-weight:800;margin-bottom:.2rem}
+.cat-meta{font-size:.72rem;color:var(--text-muted)}
+.cat-badge{position:absolute;top:.65rem;right:.65rem;font-size:.6rem;font-weight:800;text-transform:uppercase;padding:.2rem .5rem;border-radius:4px}
+.diff-easy{background:var(--mint-bg);color:var(--mint)}
+.diff-medium{background:var(--amb-bg);color:var(--amber)}
+.diff-hard{background:var(--rose-bg);color:var(--rose)}
+
+/* SETTINGS */
+.settings-row{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
+.set-group{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:.5rem}
+.set-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);text-align:center;margin-bottom:.3rem;padding:0 .5rem}
+.set-options{display:flex;gap:.2rem}
+.set-opt{padding:.35rem .75rem;border-radius:7px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;color:var(--text-muted);transition:all .2s}
+.set-opt:hover{color:var(--coral)}
+.set-opt.active{background:var(--coral);color:#fff}
+
+/* START BTN */
+.start-btn{background:var(--coral);color:#fff;border:none;padding:.9rem 2.5rem;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;transition:all .25s;box-shadow:0 4px 20px rgba(232,72,48,.3);display:block;margin:0 auto;letter-spacing:-.01em}
+.start-btn:hover{background:var(--coral-l);transform:translateY(-2px);box-shadow:0 8px 28px rgba(232,72,48,.35)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* QUIZ SCREEN */
+.quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+.q-progress-wrap{flex:1;margin:0 1.5rem}
+.q-progress-track{background:var(--border);border-radius:99px;height:10px;overflow:hidden}
+.q-progress-fill{height:100%;background:linear-gradient(to right,var(--coral),var(--coral-l));border-radius:99px;transition:width .4s ease}
+.q-progress-label{font-size:.72rem;color:var(--text-muted);font-weight:700;margin-top:.3rem;text-align:center}
+.score-pill{background:var(--coral-bg2);color:var(--coral);font-weight:800;font-size:.85rem;padding:.4rem 1rem;border-radius:99px;flex-shrink:0}
+/* TIMER */
+.timer-ring-wrap{position:relative;width:54px;height:54px;flex-shrink:0}
+.timer-svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer-track{fill:none;stroke:var(--border);stroke-width:4}
+.timer-fill{fill:none;stroke:var(--coral);stroke-width:4;stroke-linecap:round;stroke-dasharray:138;stroke-dashoffset:0;transition:stroke-dashoffset .9s linear,stroke .3s}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;color:var(--coral)}
+/* Q CARD */
+.q-card{background:var(--surface);border:2px solid var(--border);border-radius:20px;padding:2.25rem 2.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow-md)}
+.q-num{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:.75rem}
+.q-text{font-size:1.35rem;font-weight:800;line-height:1.4;letter-spacing:-.01em;margin-bottom:.5rem}
+.q-hint{font-size:.8rem;color:var(--text-muted);font-style:italic}
+/* OPTIONS */
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem}
+.opt-btn{background:var(--surface);border:2px solid var(--border2);border-radius:12px;padding:.9rem 1.1rem;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:left;display:flex;align-items:center;gap:.75rem;color:var(--text)}
+.opt-btn:hover:not(:disabled){border-color:var(--coral);background:var(--coral-bg);transform:translateX(2px)}
+.opt-btn.correct{background:var(--mint-bg);border-color:var(--mint);color:var(--mint)}
+.opt-btn.wrong{background:var(--rose-bg);border-color:var(--rose);color:var(--rose)}
+.opt-btn:disabled{cursor:default}
+.opt-letter{width:28px;height:28px;border-radius:7px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:900;flex-shrink:0;transition:all .2s;color:var(--text-muted)}
+.opt-btn:hover:not(:disabled) .opt-letter{background:var(--coral);color:#fff}
+.opt-btn.correct .opt-letter{background:var(--mint);color:#fff}
+.opt-btn.wrong .opt-letter{background:var(--rose);color:#fff}
+.feedback-box{border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;font-size:.875rem;font-weight:700;display:none}
+.feedback-box.show{display:flex;align-items:flex-start;gap:.75rem}
+.feedback-box.correct{background:var(--mint-bg);color:var(--mint);border:1.5px solid rgba(5,150,105,.2)}
+.feedback-box.wrong{background:var(--rose-bg);color:var(--rose);border:1.5px solid rgba(219,39,119,.2)}
+.feedback-icon{font-size:1.3rem;flex-shrink:0}
+.next-btn{background:var(--coral);color:#fff;border:none;padding:.8rem 2rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:all .2s;display:none}
+.next-btn:hover{background:var(--coral-l)}
+.next-btn.show{display:inline-block}
+
+/* RESULTS SCREEN */
+.results-card{background:var(--surface);border:2px solid var(--border);border-radius:24px;padding:2.5rem;max-width:560px;margin:0 auto;box-shadow:var(--shadow-md);text-align:center}
+.result-icon{font-size:4.5rem;margin-bottom:.75rem}
+.result-grade{font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:.35rem 1rem;border-radius:99px;display:inline-block;margin-bottom:1rem}
+.result-score{font-size:4.5rem;font-weight:900;letter-spacing:-.03em;line-height:1;color:var(--coral);margin-bottom:.4rem}
+.result-score-sub{color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem}
+.rstat{background:var(--surface2);border-radius:10px;padding:.75rem}
+.rstat-val{font-size:1.3rem;font-weight:900;margin-bottom:.15rem}
+.rstat-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted)}
+.result-review{text-align:left;margin-bottom:1.5rem}
+.review-item{padding:.65rem 0;border-bottom:1px solid var(--border);display:flex;gap:.75rem;align-items:flex-start;font-size:.82rem}
+.review-item:last-child{border-bottom:none}
+.review-icon{flex-shrink:0;margin-top:1px}
+.review-q{font-weight:700;margin-bottom:.2rem}
+.review-a{color:var(--text-muted)}
+.review-a.correct{color:var(--mint)}
+.review-a.wrong{color:var(--rose)}
+.result-btns{display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap}
+.btn-retry{background:var(--coral);color:#fff;border:none;padding:.75rem 1.75rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer;transition:all .2s}
+.btn-retry:hover{background:var(--coral-l);transform:translateY(-1px)}
+.btn-home{background:var(--surface2);border:1px solid var(--border2);color:var(--text-mid);padding:.75rem 1.5rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-home:hover{border-color:var(--coral);color:var(--coral)}
+.lb-table{width:100%;border-collapse:collapse;margin-top:.75rem}
+.lb-table th{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);padding:.5rem .75rem;text-align:left;border-bottom:2px solid var(--border)}
+.lb-table td{padding:.6rem .75rem;font-size:.82rem;border-bottom:1px solid var(--border)}
+.lb-table tr.you td{background:var(--coral-bg);font-weight:700;color:var(--coral)}
+.rank-badge{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;color:#fff}
+@media(max-width:600px){.options-grid{grid-template-columns:1fr}.cat-grid{grid-template-columns:1fr 1fr}.home-hero h1{font-size:2rem}}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="home-hero">
+    <div class="home-hero-badge">🧠 Knowledge Challenge</div>
+    <h1>Learn through<br><em>playing quizzes.</em></h1>
+    <p>Test your knowledge, beat the clock, and climb the leaderboard.</p>
+    <div class="home-stats">
+      <div class="hstat"><strong>24</strong><span>Categories</span></div>
+      <div class="hstat"><strong>1,200+</strong><span>Questions</span></div>
+      <div class="hstat"><strong>High Score: <span id="topScore">0</span></strong><span>Your best</span></div>
+    </div>
+  </div>
+
+  <div class="cat-grid" id="catGrid"></div>
+
+  <div class="settings-row">
+    <div class="set-group">
+      <div class="set-label">Difficulty</div>
+      <div class="set-options" id="diffOpts">
+        <button class="set-opt active" data-val="all">All</button>
+        <button class="set-opt" data-val="easy">Easy</button>
+        <button class="set-opt" data-val="medium">Medium</button>
+        <button class="set-opt" data-val="hard">Hard</button>
+      </div>
+    </div>
+    <div class="set-group">
+      <div class="set-label">Questions</div>
+      <div class="set-options" id="numOpts">
+        <button class="set-opt" data-val="5">5</button>
+        <button class="set-opt active" data-val="10">10</button>
+        <button class="set-opt" data-val="15">15</button>
+      </div>
+    </div>
+    <div class="set-group">
+      <div class="set-label">Timer</div>
+      <div class="set-options" id="timeOpts">
+        <button class="set-opt" data-val="0">None</button>
+        <button class="set-opt active" data-val="20">20s</button>
+        <button class="set-opt" data-val="30">30s</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="start-btn" id="startBtn" onclick="startQuiz()">Start Quiz →</button>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz" style="max-width:700px">
+  <div class="quiz-top">
+    <div class="timer-ring-wrap">
+      <svg class="timer-svg" viewBox="0 0 46 46">
+        <circle class="timer-track" cx="23" cy="23" r="22"/>
+        <circle class="timer-fill" cx="23" cy="23" r="22" id="timerRing"/>
+      </svg>
+      <div class="timer-num" id="timerNum">–</div>
+    </div>
+    <div class="q-progress-wrap">
+      <div class="q-progress-track"><div class="q-progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="q-progress-label" id="progressLabel">Question 1 of 10</div>
+    </div>
+    <div class="score-pill">⭐ <span id="scoreDisplay">0</span> pts</div>
+  </div>
+  <div class="q-card">
+    <div class="q-num" id="qNum">Question 1</div>
+    <div class="q-text" id="qText">Loading...</div>
+    <div class="q-hint" id="qHint"></div>
+  </div>
+  <div class="options-grid" id="optionsGrid"></div>
+  <div class="feedback-box" id="feedbackBox"><span class="feedback-icon" id="feedbackIcon"></span><div><div id="feedbackTitle" style="margin-bottom:.2rem"></div><div id="feedbackText" style="font-weight:500;opacity:.85"></div></div></div>
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results" style="max-width:700px">
+  <div class="results-card" id="resultsCard"></div>
+  <div class="card" style="background:var(--surface);border:2px solid var(--border);border-radius:20px;padding:1.5rem;max-width:560px;margin:1.25rem auto;box-shadow:var(--shadow)">
+    <h4 style="font-size:.875rem;font-weight:800;margin-bottom:1rem">🏆 Leaderboard</h4>
+    <table class="lb-table" id="leaderboard"></table>
+  </div>
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  // Science
+  {cat:'Science',diff:'easy',q:"What is the chemical symbol for water?",opts:["H2O","CO2","O2","H2"],ans:0,hint:"Two hydrogen, one oxygen"},
+  {cat:'Science',diff:'easy',q:"How many planets are in our solar system?",opts:["7","8","9","10"],ans:1,hint:"Pluto was reclassified in 2006"},
+  {cat:'Science',diff:'medium',q:"What is the speed of light in a vacuum (approximately)?",opts:["300,000 km/s","150,000 km/s","450,000 km/s","100,000 km/s"],ans:0,hint:"It's measured in kilometres per second"},
+  {cat:'Science',diff:'medium',q:"What does DNA stand for?",opts:["Deoxyribonucleic Acid","Deoxyribose Nitrogen Acid","Direct Nucleic Arrangement","Double Nucleotide Acid"],ans:0,hint:"It carries genetic information"},
+  {cat:'Science',diff:'hard',q:"What is the atomic number of gold (Au)?",opts:["78","79","80","82"],ans:1,hint:"It's in period 6 of the periodic table"},
+  // History
+  {cat:'History',diff:'easy',q:"In what year did World War II end?",opts:["1943","1944","1945","1946"],ans:2,hint:"After atomic bombs were dropped on Japan"},
+  {cat:'History',diff:'easy',q:"Who was the first President of the United States?",opts:["John Adams","Thomas Jefferson","George Washington","Benjamin Franklin"],ans:2,hint:"He's on the one dollar bill"},
+  {cat:'History',diff:'medium',q:"The Great Wall of China was primarily built during which dynasty?",opts:["Tang","Han","Ming","Qing"],ans:2,hint:"This dynasty ruled from 1368–1644"},
+  {cat:'History',diff:'hard',q:"Which battle is considered the turning point of the Eastern Front in WWII?",opts:["Kursk","Stalingrad","Kiev","Moscow"],ans:1,hint:"It took place in 1942–43"},
+  // Tech
+  {cat:'Technology',diff:'easy',q:"What does 'CPU' stand for?",opts:["Central Processing Unit","Computer Performance Unit","Core Processing Unit","Central Program Unit"],ans:0,hint:"It's the brain of the computer"},
+  {cat:'Technology',diff:'medium',q:"Which programming language was created by Guido van Rossum?",opts:["Java","Ruby","Python","Perl"],ans:2,hint:"Named after a British comedy group"},
+  {cat:'Technology',diff:'medium',q:"What does HTTP stand for?",opts:["HyperText Transfer Protocol","High Transfer Text Protocol","HyperText Transport Program","Hyperlink Text Transfer Protocol"],ans:0,hint:"Used for web communication"},
+  {cat:'Technology',diff:'hard',q:"Who is credited as the inventor of the World Wide Web?",opts:["Vint Cerf","Bill Gates","Tim Berners-Lee","Steve Jobs"],ans:2,hint:"He proposed it in 1989 at CERN"},
+  // Geography
+  {cat:'Geography',diff:'easy',q:"What is the capital of Australia?",opts:["Sydney","Melbourne","Brisbane","Canberra"],ans:3,hint:"Many people get this wrong"},
+  {cat:'Geography',diff:'easy',q:"Which is the largest ocean on Earth?",opts:["Atlantic","Indian","Arctic","Pacific"],ans:3,hint:"It covers more than 30% of Earth"},
+  {cat:'Geography',diff:'medium',q:"The Amazon river flows primarily through which country?",opts:["Peru","Venezuela","Colombia","Brazil"],ans:3,hint:"The world's largest country in South America"},
+  {cat:'Geography',diff:'hard',q:"What is the smallest country in the world by area?",opts:["Monaco","San Marino","Liechtenstein","Vatican City"],ans:3,hint:"It's an independent city within Rome"},
+  // Arts
+  {cat:'Arts',diff:'easy',q:"Who painted the Mona Lisa?",opts:["Michelangelo","Raphael","Leonardo da Vinci","Donatello"],ans:2,hint:"A true Renaissance man"},
+  {cat:'Arts',diff:'medium',q:"Which artist cut off his own ear?",opts:["Pablo Picasso","Claude Monet","Vincent van Gogh","Paul Gauguin"],ans:2,hint:"Painted 'The Starry Night'"},
+  {cat:'Arts',diff:'hard',q:"In what year was the Eiffel Tower built?",opts:["1882","1885","1889","1893"],ans:2,hint:"Built for the World's Fair"},
+  // Maths
+  {cat:'Maths',diff:'easy',q:"What is the value of π (pi) to 2 decimal places?",opts:["3.12","3.14","3.16","3.18"],ans:1,hint:"It starts 3.14..."},
+  {cat:'Maths',diff:'medium',q:"What is the square root of 196?",opts:["12","13","14","15"],ans:2,hint:"14 × 14 = ?"},
+  {cat:'Maths',diff:'hard',q:"What is the sum of angles in a pentagon?",opts:["360°","450°","540°","720°"],ans:2,hint:"Use (n-2) × 180°"},
+  // Pop Culture
+  {cat:'Pop Culture',diff:'easy',q:"Which band performed 'Bohemian Rhapsody'?",opts:["Led Zeppelin","The Beatles","Queen","The Rolling Stones"],ans:2,hint:"Fronted by Freddie Mercury"},
+  {cat:'Pop Culture',diff:'medium',q:"In which year was the first iPhone released?",opts:["2005","2006","2007","2008"],ans:2,hint:"Steve Jobs announced it at Macworld"},
+];
+
+const CATEGORIES = [
+  {name:'Science',emoji:'🔬',count:5,color:'#0284c7'},
+  {name:'History',emoji:'🏛️',count:4,color:'#7c3aed'},
+  {name:'Technology',emoji:'💻',count:4,color:'#059669'},
+  {name:'Geography',emoji:'🌍',count:4,color:'#d97706'},
+  {name:'Arts',emoji:'🎨',count:3,color:'#db2777'},
+  {name:'Maths',emoji:'📐',count:3,color:'#e84830'},
+  {name:'Pop Culture',emoji:'🎬',count:2,color:'#0891b2'},
+  {name:'Mix',emoji:'🎯',count:25,color:'#5b21b6'},
+];
+
+let selectedCat='Mix', selectedDiff='all', questionCount=10, timerSeconds=20;
+let currentQ=0, score=0, userAnswers=[], quizQuestions=[], timer=null;
+let highScore = parseInt(localStorage.getItem('qz_hs')) || 0;
+let leaderboardData = JSON.parse(localStorage.getItem('qz_lb')) || [
+  {name:'Alex K.',score:950,time:142},{name:'Jamie L.',score:880,time:168},{name:'Sam R.',score:820,time:195},{name:'Taylor M.',score:770,time:210}
+];
+
+document.getElementById('topScore').textContent = highScore;
+
+// RENDER CATEGORIES
+document.getElementById('catGrid').innerHTML = CATEGORIES.map(c => `
+  <div class="cat-card ${c.name===selectedCat?'selected':''}" onclick="selectCat('${c.name}',this)">
+    <div class="cat-emoji">${c.emoji}</div>
+    <div class="cat-title">${c.name}</div>
+    <div class="cat-meta">${c.count} questions</div>
+  </div>`).join('');
+
+window.selectCat = function(name, el) {
+  selectedCat = name;
+  document.querySelectorAll('.cat-card').forEach(x=>x.classList.remove('selected'));
+  el.classList.add('selected');
+};
+
+// SETTINGS
+['diffOpts','numOpts','timeOpts'].forEach((id,i) => {
+  document.getElementById(id).addEventListener('click', e => {
+    if(!e.target.classList.contains('set-opt')) return;
+    document.querySelectorAll('#'+id+' .set-opt').forEach(x=>x.classList.remove('active'));
+    e.target.classList.add('active');
+    if(i===0) selectedDiff = e.target.dataset.val;
+    if(i===1) questionCount = parseInt(e.target.dataset.val);
+    if(i===2) timerSeconds = parseInt(e.target.dataset.val);
+  });
+});
+
+// START
+window.startQuiz = function() {
+  let pool = selectedCat==='Mix' ? ALL_QUESTIONS : ALL_QUESTIONS.filter(q=>q.cat===selectedCat);
+  if(selectedDiff!=='all') pool = pool.filter(q=>q.diff===selectedDiff);
+  if(!pool.length){alert('No questions match those filters!');return;}
+  quizQuestions = shuffleArr(pool).slice(0, Math.min(questionCount, pool.length));
+  currentQ=0; score=0; userAnswers=[];
+  showScreen('quiz');
+  showQuestion();
+};
+
+function shuffleArr(a){return[...a].sort(()=>Math.random()-.5)}
+
+function showQuestion() {
+  const q = quizQuestions[currentQ];
+  const pct = (currentQ/quizQuestions.length)*100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = `Question ${currentQ+1} of ${quizQuestions.length}`;
+  document.getElementById('qNum').textContent = `Question ${currentQ+1} · ${q.cat} · ${q.diff.charAt(0).toUpperCase()+q.diff.slice(1)}`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qHint').textContent = '💡 ' + q.hint;
+  document.getElementById('scoreDisplay').textContent = score;
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  const letters = ['A','B','C','D'];
+  document.getElementById('optionsGrid').innerHTML = q.opts.map((opt,i) => `
+    <button class="opt-btn" onclick="selectAnswer(${i})">
+      <div class="opt-letter">${letters[i]}</div>
+      <span>${opt}</span>
+    </button>`).join('');
+
+  if(timerSeconds > 0) startTimer();
+  else { document.getElementById('timerNum').textContent='–'; }
+}
+
+function startTimer() {
+  clearInterval(timer);
+  let t = timerSeconds;
+  const circumference = 138;
+  updateTimer(t);
+  timer = setInterval(() => {
+    t--;
+    updateTimer(t);
+    if(t<=0) { clearInterval(timer); timeUp(); }
+  }, 1000);
+}
+
+function updateTimer(t) {
+  const pct = t / timerSeconds;
+  document.getElementById('timerNum').textContent = t;
+  document.getElementById('timerRing').style.strokeDashoffset = 138 - (pct * 138);
+  document.getElementById('timerRing').style.stroke = t<=5 ? '#db2777' : t<=10 ? '#d97706' : 'var(--coral)';
+}
+
+function timeUp() {
+  selectAnswer(-1); // no answer
+}
+
+window.selectAnswer = function(idx) {
+  clearInterval(timer);
+  const q = quizQuestions[currentQ];
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+
+  const correct = idx === q.ans;
+  const pts = correct ? (q.diff==='easy'?10:q.diff==='medium'?20:30) : 0;
+  score += pts;
+  userAnswers.push({q:q.q,correct,userAns:idx,correctAns:q.ans,opts:q.opts});
+
+  document.querySelectorAll('.opt-btn').forEach((btn,i) => {
+    if(i===q.ans) btn.classList.add('correct');
+    else if(i===idx && !correct) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedbackBox');
+  if(idx===-1){
+    fb.className='feedback-box wrong show';
+    document.getElementById('feedbackIcon').textContent='⏰';
+    document.getElementById('feedbackTitle').textContent='Time\'s up!';
+    document.getElementById('feedbackText').textContent=`The correct answer was: ${q.opts[q.ans]}`;
+  } else if(correct){
+    fb.className='feedback-box correct show';
+    document.getElementById('feedbackIcon').textContent='🎉';
+    document.getElementById('feedbackTitle').textContent=`Correct! +${pts} points`;
+    document.getElementById('feedbackText').textContent='Well done, keep it up!';
+  } else {
+    fb.className='feedback-box wrong show';
+    document.getElementById('feedbackIcon').textContent='❌';
+    document.getElementById('feedbackTitle').textContent='Not quite!';
+    document.getElementById('feedbackText').textContent=`Correct answer: ${q.opts[q.ans]}`;
+  }
+
+  document.getElementById('nextBtn').className = 'next-btn show';
+  if(currentQ===quizQuestions.length-1) document.getElementById('nextBtn').textContent = 'See Results →';
+};
+
+window.nextQuestion = function() {
+  currentQ++;
+  if(currentQ >= quizQuestions.length) showResults();
+  else showQuestion();
+};
+
+function showResults() {
+  const total = quizQuestions.length;
+  const correct = userAnswers.filter(a=>a.correct).length;
+  const pct = Math.round((correct/total)*100);
+  let grade, icon, gradeColor;
+  if(pct>=90){grade='Excellent!';icon='🏆';gradeColor='var(--mint)'}
+  else if(pct>=70){grade='Great Job!';icon='⭐';gradeColor='var(--amber)'}
+  else if(pct>=50){grade='Good Effort';icon='👍';gradeColor='var(--sky)'}
+  else{grade='Keep Practicing';icon='💪';gradeColor='var(--rose)'}
+
+  if(score > highScore){ highScore=score; localStorage.setItem('qz_hs',score); document.getElementById('topScore').textContent=score; }
+  leaderboardData.push({name:'You',score,time:Math.floor(Math.random()*120+60),isYou:true});
+  leaderboardData.sort((a,b)=>b.score-a.score);
+  if(leaderboardData.length>10) leaderboardData.length=10;
+  localStorage.setItem('qz_lb', JSON.stringify(leaderboardData.filter(e=>!e.isYou)));
+
+  document.getElementById('resultsCard').innerHTML = `
+    <div class="result-icon">${icon}</div>
+    <div class="result-grade" style="background:${gradeColor}15;color:${gradeColor}">${grade}</div>
+    <div class="result-score">${score}</div>
+    <div class="result-score-sub">${pct}% correct · ${correct} of ${total} questions</div>
+    <div class="result-stats">
+      <div class="rstat"><div class="rstat-val" style="color:var(--mint)">${correct}</div><div class="rstat-label">Correct</div></div>
+      <div class="rstat"><div class="rstat-val" style="color:var(--rose)">${total-correct}</div><div class="rstat-label">Wrong</div></div>
+      <div class="rstat"><div class="rstat-val" style="color:var(--amber)">${score}</div><div class="rstat-label">Points</div></div>
+    </div>
+    <div class="result-review">
+      <div style="font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem">Review Answers</div>
+      ${userAnswers.slice(0,5).map((a,i)=>`
+        <div class="review-item">
+          <span class="review-icon">${a.correct?'✅':'❌'}</span>
+          <div>
+            <div class="review-q">${i+1}. ${a.q}</div>
+            <div class="review-a ${a.correct?'correct':'wrong'}">${a.correct?'Correct: '+a.opts[a.correctAns]:'Your answer: '+(a.userAns>=0?a.opts[a.userAns]:'No answer')+' · Correct: '+a.opts[a.correctAns]}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="result-btns">
+      <button class="btn-retry" onclick="window.startQuiz()">↺ Try Again</button>
+      <button class="btn-home" onclick="showScreen('home')">🏠 Home</button>
+    </div>`;
+
+  const lbColors = ['#f59e0b','#6b7280','#a16207'];
+  document.getElementById('leaderboard').innerHTML = `
+    <tr><th>Rank</th><th>Player</th><th>Score</th></tr>
+    ${leaderboardData.slice(0,8).map((e,i)=>`
+      <tr class="${e.isYou?'you':''}">
+        <td><div class="rank-badge" style="background:${i<3?lbColors[i]:'var(--text-muted)'}">${i+1}</div></td>
+        <td><strong>${e.name}</strong>${e.isYou?' 👈 you':''}</td>
+        <td><strong>${e.score}</strong></td>
+      </tr>`).join('')}`;
+
+  showScreen('results');
+}
+
+function showScreen(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+}
+</script>
+</body>
+</html>

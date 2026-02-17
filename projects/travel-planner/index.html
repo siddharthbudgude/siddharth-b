@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wanderlust — Travel Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600;700&family=Karla:ital,wght@1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR NAV -->
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="brand">
+      <div class="brand-mark">W</div>
+      <div>
+        <div class="brand-name">Wanderlust</div>
+        <div class="brand-tagline">Your travel journal</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-link active" data-page="overview" href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Overview
+      </a>
+      <a class="nav-link" data-page="trips" href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        My Trips
+      </a>
+      <a class="nav-link" data-page="itinerary" href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Itinerary
+      </a>
+      <a class="nav-link" data-page="budget" href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Budget
+      </a>
+      <a class="nav-link" data-page="packing" href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        Packing List
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-trip-card" id="sidebarTripCard">
+    <div class="trip-card-label">Next Adventure</div>
+    <div class="trip-card-dest" id="sidebarDest">Kyoto, Japan</div>
+    <div class="trip-card-dates" id="sidebarDates">Mar 15 – Mar 28, 2026</div>
+    <div class="trip-card-countdown">
+      <span class="countdown-num" id="countdownDays">26</span>
+      <span class="countdown-text">days away</span>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- OVERVIEW PAGE -->
+  <section id="page-overview" class="page active">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Good afternoon, <em>Emma</em> ✈️</h1>
+        <p class="page-sub">Discover, plan, and experience the world beautifully.</p>
+      </div>
+      <button class="btn-primary" id="newTripBtn">+ Plan New Trip</button>
+    </header>
+
+    <!-- Stats strip -->
+    <div class="stats-strip">
+      <div class="stat-box">
+        <div class="stat-num" id="statTrips">3</div>
+        <div class="stat-label">Trips Planned</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-box">
+        <div class="stat-num" id="statCountries">7</div>
+        <div class="stat-label">Countries Visited</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-box">
+        <div class="stat-num" id="statDays">34</div>
+        <div class="stat-label">Days Travelled</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-box">
+        <div class="stat-num">$12,400</div>
+        <div class="stat-label">Total Spent</div>
+      </div>
+    </div>
+
+    <!-- Featured / Hero Trip -->
+    <div class="featured-trip" id="featuredTrip">
+      <div class="featured-bg" id="featuredBg"></div>
+      <div class="featured-content">
+        <div class="featured-tag">📍 Upcoming Trip</div>
+        <h2 class="featured-title" id="featuredTitle">Kyoto & Tokyo, Japan</h2>
+        <p class="featured-desc" id="featuredDesc">Cherry blossoms, ancient temples, and world-class cuisine await on this 13-day journey through Japan's cultural heart.</p>
+        <div class="featured-meta" id="featuredMeta">
+          <span>🗓 Mar 15 – Mar 28</span>
+          <span>👥 2 travelers</span>
+          <span>💰 $4,200 budget</span>
+        </div>
+        <button class="btn-outline-light" onclick="goToPage('itinerary')">View Itinerary →</button>
+      </div>
+    </div>
+
+    <!-- Two col -->
+    <div class="ov-grid">
+
+      <!-- Upcoming activities -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Upcoming Activities</h3>
+          <button class="link-btn" onclick="goToPage('itinerary')">View All</button>
+        </div>
+        <div id="upcomingActivities"></div>
+      </div>
+
+      <!-- Destination Wishlist -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Destination Wishlist</h3>
+          <button class="link-btn" id="addWishBtn">+ Add</button>
+        </div>
+        <div id="wishlist"></div>
+      </div>
+
+    </div>
+
+    <!-- Travel Tips -->
+    <div class="tips-strip" id="tipsStrip"></div>
+
+  </section>
+
+  <!-- TRIPS PAGE -->
+  <section id="page-trips" class="page">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">My Trips</h1>
+        <p class="page-sub">All your adventures, past and future.</p>
+      </div>
+      <button class="btn-primary" id="newTripBtn2">+ New Trip</button>
+    </header>
+
+    <div class="trips-filter">
+      <button class="filter-pill active" data-filter="all">All Trips</button>
+      <button class="filter-pill" data-filter="upcoming">Upcoming</button>
+      <button class="filter-pill" data-filter="past">Past</button>
+      <button class="filter-pill" data-filter="planning">Planning</button>
+    </div>
+
+    <div class="trips-grid" id="tripsGrid"></div>
+  </section>
+
+  <!-- ITINERARY PAGE -->
+  <section id="page-itinerary" class="page">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Itinerary</h1>
+        <p class="page-sub" id="itinSubtitle">Kyoto & Tokyo — 13 days</p>
+      </div>
+      <button class="btn-primary" id="addActivityBtn">+ Add Activity</button>
+    </header>
+
+    <div class="itin-layout">
+      <div class="itin-main">
+        <div id="itineraryDays"></div>
+      </div>
+      <div class="itin-sidebar">
+        <div class="card">
+          <div class="card-header"><h3>Trip Summary</h3></div>
+          <div class="summary-items" id="summaryItems"></div>
+        </div>
+        <div class="card" style="margin-top:1rem">
+          <div class="card-header"><h3>Weather</h3></div>
+          <div class="weather-list" id="weatherList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUDGET PAGE -->
+  <section id="page-budget" class="page">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Budget Tracker</h1>
+        <p class="page-sub">Track every penny of your adventure.</p>
+      </div>
+      <button class="btn-primary" id="addExpenseBtn">+ Add Expense</button>
+    </header>
+
+    <div class="budget-layout">
+
+      <!-- Budget Overview -->
+      <div class="budget-overview">
+        <div class="budget-hero">
+          <div class="budget-circle-wrap">
+            <svg class="budget-svg" viewBox="0 0 140 140">
+              <circle class="budget-track" cx="70" cy="70" r="58"/>
+              <circle class="budget-used" cx="70" cy="70" r="58" id="budgetArc"/>
+            </svg>
+            <div class="budget-center">
+              <div class="budget-pct-num" id="budgetPct">0%</div>
+              <div class="budget-pct-label">of budget used</div>
+            </div>
+          </div>
+          <div class="budget-numbers">
+            <div class="bn-item">
+              <div class="bn-label">Total Budget</div>
+              <div class="bn-val" id="bnTotal">$4,200</div>
+            </div>
+            <div class="bn-item">
+              <div class="bn-label">Spent</div>
+              <div class="bn-val spent" id="bnSpent">$0</div>
+            </div>
+            <div class="bn-item">
+              <div class="bn-label">Remaining</div>
+              <div class="bn-val remain" id="bnRemain">$4,200</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="card" style="margin-top:1.25rem">
+          <div class="card-header"><h3>By Category</h3></div>
+          <div id="catBreakdown"></div>
+        </div>
+      </div>
+
+      <!-- Expense List -->
+      <div class="expense-right">
+        <div class="card">
+          <div class="card-header">
+            <h3>Expenses</h3>
+            <select class="mini-select" id="expCatFilter">
+              <option value="all">All Categories</option>
+              <option>Flights</option><option>Hotel</option><option>Food</option>
+              <option>Transport</option><option>Activities</option><option>Shopping</option><option>Other</option>
+            </select>
+          </div>
+          <div id="expenseList"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PACKING LIST PAGE -->
+  <section id="page-packing" class="page">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Packing List</h1>
+        <p class="page-sub">Never forget a thing.</p>
+      </div>
+      <div style="display:flex;gap:0.75rem">
+        <button class="btn-secondary" id="addCategoryBtn">+ Category</button>
+        <button class="btn-primary" id="addPackingBtn">+ Add Item</button>
+      </div>
+    </header>
+
+    <div class="packing-progress-bar-wrap">
+      <div class="pp-label">
+        <span>Packing Progress</span>
+        <span id="packingPct" class="pp-pct">0%</span>
+      </div>
+      <div class="pp-track">
+        <div class="pp-fill" id="ppFill"></div>
+      </div>
+      <div class="pp-counts" id="ppCounts">0 of 0 items packed</div>
+    </div>
+
+    <div class="packing-grid" id="packingGrid"></div>
+  </section>
+
+</main>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">New Trip</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

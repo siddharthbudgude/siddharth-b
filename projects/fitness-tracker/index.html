@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PulseTrack — Fitness Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span>PulseTrack</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" onclick="showTab('dashboard')">Dashboard</button>
+      <button class="tab" onclick="showTab('workout')">Log Workout</button>
+      <button class="tab" onclick="showTab('goals')">Goals</button>
+      <button class="tab" onclick="showTab('history')">History</button>
+    </nav>
+    <div class="streak-badge">
+      🔥 <span id="streakCount">7</span> day streak
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- DASHBOARD TAB -->
+  <div class="tab-content active" id="tab-dashboard">
+
+    <div class="dash-header">
+      <div>
+        <h1>Ready to crush it, Alex? 💪</h1>
+        <p class="sub">Tuesday, February 17 · Week 7 of your fitness journey</p>
+      </div>
+      <button class="cta-btn" onclick="showTab('workout')">+ Log Workout</button>
+    </div>
+
+    <!-- Stats Ring Row -->
+    <div class="stats-row">
+      <div class="stat-ring-card">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 100 100">
+            <circle class="ring-track" cx="50" cy="50" r="38"/>
+            <circle class="ring-fill ring-calories" cx="50" cy="50" r="38" id="calRing"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-val" id="calVal">0</div>
+            <div class="ring-unit">kcal</div>
+          </div>
+        </div>
+        <div class="ring-label">Calories Burned</div>
+        <div class="ring-goal" id="calGoal">Goal: 500 kcal</div>
+      </div>
+
+      <div class="stat-ring-card">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 100 100">
+            <circle class="ring-track" cx="50" cy="50" r="38"/>
+            <circle class="ring-fill ring-steps" cx="50" cy="50" r="38" id="stepsRing"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-val" id="stepsVal">0</div>
+            <div class="ring-unit">steps</div>
+          </div>
+        </div>
+        <div class="ring-label">Daily Steps</div>
+        <div class="ring-goal" id="stepsGoal">Goal: 10,000</div>
+      </div>
+
+      <div class="stat-ring-card">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 100 100">
+            <circle class="ring-track" cx="50" cy="50" r="38"/>
+            <circle class="ring-fill ring-workout" cx="50" cy="50" r="38" id="timeRing"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-val" id="timeVal">0</div>
+            <div class="ring-unit">min</div>
+          </div>
+        </div>
+        <div class="ring-label">Active Time</div>
+        <div class="ring-goal" id="timeGoal">Goal: 60 min</div>
+      </div>
+
+      <div class="stat-ring-card">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 100 100">
+            <circle class="ring-track" cx="50" cy="50" r="38"/>
+            <circle class="ring-fill ring-water" cx="50" cy="50" r="38" id="waterRing"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-val" id="waterVal">0</div>
+            <div class="ring-unit">L</div>
+          </div>
+        </div>
+        <div class="ring-label">Water Intake</div>
+        <div class="ring-goal">Goal: 3L</div>
+      </div>
+    </div>
+
+    <!-- Two Col Layout -->
+    <div class="two-col">
+
+      <!-- Weekly Chart -->
+      <div class="card chart-card">
+        <div class="card-head">
+          <h3>Weekly Activity</h3>
+          <div class="chart-legend">
+            <span class="dot calories-dot"></span>Calories
+            <span class="dot workout-dot"></span>Duration
+          </div>
+        </div>
+        <canvas id="weeklyChart" height="200"></canvas>
+      </div>
+
+      <!-- Today's Plan -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Today's Plan</h3>
+          <span class="plan-date">Feb 17</span>
+        </div>
+        <div id="todayPlan"></div>
+        <div class="water-tracker">
+          <div class="wt-header">
+            <span>💧 Water Tracker</span>
+            <span id="waterDisplay" class="mono">0 / 3.0 L</span>
+          </div>
+          <div class="water-cups" id="waterCups"></div>
+          <div class="water-btns">
+            <button class="water-btn" onclick="addWater(0.25)">+250ml</button>
+            <button class="water-btn" onclick="addWater(0.5)">+500ml</button>
+            <button class="water-btn water-reset" onclick="resetWater()">Reset</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Recent Workouts -->
+    <div class="card">
+      <div class="card-head">
+        <h3>Recent Workouts</h3>
+        <button class="text-btn" onclick="showTab('history')">View All →</button>
+      </div>
+      <div id="recentWorkouts"></div>
+    </div>
+
+    <!-- Personal Bests -->
+    <div class="card">
+      <div class="card-head"><h3>🏆 Personal Bests</h3></div>
+      <div class="pb-grid" id="pbGrid"></div>
+    </div>
+
+  </div>
+
+  <!-- WORKOUT LOG TAB -->
+  <div class="tab-content" id="tab-workout">
+    <div class="dash-header">
+      <div>
+        <h1>Log Your Workout</h1>
+        <p class="sub">Record exercises, sets, and reps</p>
+      </div>
+    </div>
+
+    <!-- Quick Templates -->
+    <h3 style="margin-bottom:1rem;font-size:1rem;color:var(--text-muted)">Quick Templates</h3>
+    <div class="template-grid" id="templateGrid"></div>
+
+    <!-- Log Form -->
+    <div class="card" style="margin-top:1.5rem">
+      <div class="card-head"><h3>Custom Workout Entry</h3></div>
+      <div class="log-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Workout Type</label>
+            <select id="wType" class="form-inp">
+              <option>Strength Training</option><option>Cardio</option><option>HIIT</option>
+              <option>Yoga</option><option>Cycling</option><option>Swimming</option>
+              <option>Running</option><option>CrossFit</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Duration (min)</label>
+            <input type="number" id="wDuration" class="form-inp" placeholder="45" min="1" max="300">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Calories Burned</label>
+            <input type="number" id="wCalories" class="form-inp" placeholder="350" min="1">
+          </div>
+          <div class="form-group">
+            <label>Intensity</label>
+            <select id="wIntensity" class="form-inp">
+              <option>Light</option><option selected>Moderate</option><option>Intense</option><option>Maximum</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes (optional)</label>
+          <input type="text" id="wNotes" class="form-inp" placeholder="How did it feel? Any PRs?">
+        </div>
+
+        <!-- Exercise Logger -->
+        <div class="exercises-section">
+          <div class="ex-head">
+            <span>Exercises</span>
+            <button class="text-btn" onclick="addExerciseRow()">+ Add Exercise</button>
+          </div>
+          <div id="exerciseRows"></div>
+        </div>
+
+        <button class="cta-btn full-width" onclick="logWorkout()">Save Workout ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOALS TAB -->
+  <div class="tab-content" id="tab-goals">
+    <div class="dash-header">
+      <div>
+        <h1>Your Goals</h1>
+        <p class="sub">Set targets and track your progress</p>
+      </div>
+      <button class="cta-btn" onclick="openGoalModal()">+ New Goal</button>
+    </div>
+    <div class="goals-grid" id="goalsGrid"></div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div class="tab-content" id="tab-history">
+    <div class="dash-header">
+      <div>
+        <h1>Workout History</h1>
+        <p class="sub">All your logged sessions</p>
+      </div>
+    </div>
+    <div class="filter-row">
+      <input type="text" class="search-inp" id="histSearch" placeholder="🔍 Search workouts..." oninput="renderHistory()">
+      <select class="form-inp small-sel" id="histType" onchange="renderHistory()">
+        <option value="all">All Types</option>
+        <option>Strength Training</option><option>Cardio</option><option>HIIT</option>
+        <option>Yoga</option><option>Cycling</option><option>Running</option>
+      </select>
+    </div>
+    <div id="historyList"></div>
+  </div>
+
+</main>
+
+<!-- GOAL MODAL -->
+<div class="overlay" id="goalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Set a New Goal</h3>
+      <button class="close-btn" onclick="closeGoalModal()">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Goal Title</label>
+      <input type="text" class="form-inp" id="goalTitle" placeholder="e.g. Run 5km in under 30 min">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Target Value</label>
+        <input type="number" class="form-inp" id="goalTarget" placeholder="100">
+      </div>
+      <div class="form-group">
+        <label>Current Value</label>
+        <input type="number" class="form-inp" id="goalCurrent" placeholder="45">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Unit</label>
+      <input type="text" class="form-inp" id="goalUnit" placeholder="km, lbs, sessions...">
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <select class="form-inp" id="goalCat">
+        <option>Cardio</option><option>Strength</option><option>Weight</option>
+        <option>Nutrition</option><option>Flexibility</option><option>General</option>
+      </select>
+    </div>
+    <button class="cta-btn full-width" onclick="saveGoal()">Save Goal</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

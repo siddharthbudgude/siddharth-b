@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — Social Media Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Bodoni+Moda:ital,wght@1,700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#faf9ff;--surface:#fff;--surface2:#f3f0fb;--border:rgba(100,70,200,.1);--border2:rgba(100,70,200,.18);
+  --text:#1a0f35;--text-mid:#4a3870;--text-muted:#9a88c0;
+  --violet:#5b21b6;--vio-l:#7c3aed;--vio-bg:rgba(91,33,182,.08);--vio-bg2:rgba(91,33,182,.14);
+  --citrus:#d97706;--cit-bg:rgba(217,119,6,.1);
+  --rose:#e11d48;--rose-bg:rgba(225,29,72,.08);
+  --teal:#0891b2;--teal-bg:rgba(8,145,178,.08);
+  --green:#059669;--green-bg:rgba(5,150,105,.08);
+  --r:14px;--shadow:0 2px 16px rgba(91,33,182,.07);--shadow-md:0 6px 28px rgba(91,33,182,.12)
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;min-height:100vh;display:flex}
+/* SIDEBAR */
+.sidebar{width:230px;background:var(--violet);position:fixed;top:0;left:0;height:100vh;padding:1.75rem 1.25rem;display:flex;flex-direction:column;z-index:100}
+.brand{color:#fff;font-size:1.2rem;font-weight:800;margin-bottom:2rem;display:flex;align-items:center;gap:.5rem}
+.brand-icon{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.snav{display:flex;flex-direction:column;gap:.2rem;flex:1}
+.snl{display:flex;align-items:center;gap:.65rem;padding:.6rem .85rem;border-radius:8px;color:rgba(255,255,255,.6);font-size:.82rem;font-weight:600;cursor:pointer;border:none;background:none;font-family:'Manrope',sans-serif;text-align:left;transition:all .2s;width:100%}
+.snl:hover,.snl.active{color:#fff;background:rgba(255,255,255,.15)}
+.snl svg{flex-shrink:0;opacity:.8}
+.platform-pills{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.15)}
+.platform-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:.65rem}
+.plat-pill{display:flex;align-items:center;gap:.5rem;padding:.4rem .7rem;border-radius:6px;margin-bottom:.25rem;cursor:pointer;transition:all .2s}
+.plat-pill:hover{background:rgba(255,255,255,.1)}
+.plat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.plat-name{font-size:.75rem;color:rgba(255,255,255,.65);font-weight:600}
+/* MAIN */
+.main{margin-left:230px;flex:1;padding:2rem 2.25rem;min-height:100vh}
+.page{display:none;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.page-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem}
+.page-title{font-size:1.85rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.2rem}
+.page-sub{color:var(--text-muted);font-size:.85rem}
+.date-range{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:.5rem .9rem;color:var(--text-mid);font-family:'Manrope',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;outline:none}
+/* METRIC CARDS */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.35rem;box-shadow:var(--shadow);transition:all .25s;position:relative;overflow:hidden}
+.metric-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.metric-card::after{content:'';position:absolute;right:-15px;bottom:-15px;width:80px;height:80px;border-radius:50%;opacity:.1}
+.mc-ig::after{background:var(--rose)}
+.mc-tw::after{background:var(--teal)}
+.mc-li::after{background:#0a66c2}
+.mc-yt::after{background:#ff0000}
+.mc-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text-muted);margin-bottom:.7rem;display:flex;align-items:center;gap:.4rem}
+.mc-platform-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mc-number{font-size:2rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.35rem;line-height:1}
+.mc-change{font-size:.72rem;font-weight:700}
+.mc-change.up{color:var(--green)}
+.mc-change.down{color:var(--rose)}
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:1.5fr 1fr;gap:1.25rem;margin-bottom:1.5rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;box-shadow:var(--shadow)}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
+.card-head h3{font-size:.9rem;font-weight:800;letter-spacing:-.01em}
+.chart-tabs{display:flex;gap:.2rem;background:var(--surface2);border-radius:7px;padding:.2rem}
+.ctab{padding:.3rem .7rem;border-radius:5px;border:none;background:none;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;color:var(--text-muted);transition:all .2s}
+.ctab.active{background:var(--surface);color:var(--violet);box-shadow:0 1px 4px rgba(91,33,182,.1)}
+/* TOP POSTS */
+.posts-list{display:flex;flex-direction:column;gap:.75rem}
+.post-item{display:flex;gap:.9rem;align-items:flex-start;padding:.9rem 0;border-bottom:1px solid var(--border)}
+.post-item:last-child{border-bottom:none}
+.post-rank{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:#fff;flex-shrink:0;margin-top:1px}
+.post-info{flex:1;min-width:0}
+.post-text{font-size:.8rem;font-weight:600;line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.3rem}
+.post-meta-row{display:flex;gap:.75rem;font-size:.7rem;color:var(--text-muted)}
+.post-stat{display:flex;align-items:center;gap:.2rem}
+.post-stat svg{width:11px;height:11px;flex-shrink:0}
+.post-eng{text-align:right}
+.post-eng-num{font-size:.95rem;font-weight:800;color:var(--violet)}
+.post-eng-label{font-size:.62rem;color:var(--text-muted)}
+/* SCHEDULE */
+.schedule-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.5rem;margin-bottom:1rem}
+.sched-day-head{text-align:center;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);padding:.3rem 0}
+.sched-slot{min-height:60px;border-radius:8px;border:1.5px dashed var(--border);padding:.4rem;cursor:pointer;transition:all .2s;position:relative}
+.sched-slot:hover{border-color:var(--violet);background:var(--vio-bg)}
+.sched-slot.has-post{border-style:solid;border-color:var(--border)}
+.sched-post{background:var(--vio-bg2);border-radius:5px;padding:.3rem .4rem;font-size:.62rem;font-weight:700;color:var(--violet);line-height:1.35;margin-bottom:.2rem}
+.sched-add-btn{width:100%;height:100%;border:none;background:none;color:var(--text-muted);font-size:.75rem;cursor:pointer;font-family:'Manrope',sans-serif;display:flex;align-items:center;justify-content:center;gap:.2rem}
+/* AUDIENCE */
+.aud-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.aud-bar-item{margin-bottom:.85rem}
+.aud-bar-label{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.35rem}
+.aud-bar-label span:first-child{color:var(--text-mid);font-weight:600}
+.aud-bar-label span:last-child{color:var(--violet);font-weight:800}
+.aud-track{background:var(--surface2);border-radius:4px;height:8px;overflow:hidden}
+.aud-fill{height:100%;border-radius:4px;transition:width .8s ease}
+/* BTN */
+.btn-vio{background:var(--violet);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:8px;font-family:'Manrope',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-vio:hover{background:var(--vio-l);transform:translateY(-1px)}
+@media(max-width:1100px){.metrics-row{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.aud-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.sidebar{display:none}.main{margin-left:0}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><div class="brand-icon">📡</div>Pulse</div>
+  <nav class="snav">
+    <button class="snl active" onclick="showDash('overview')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview
+    </button>
+    <button class="snl" onclick="showDash('posts')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Top Posts
+    </button>
+    <button class="snl" onclick="showDash('schedule')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Schedule
+    </button>
+    <button class="snl" onclick="showDash('audience')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Audience
+    </button>
+  </nav>
+  <div class="platform-pills">
+    <div class="platform-label">Connected Accounts</div>
+    <div class="plat-pill"><div class="plat-dot" style="background:#e1306c"></div><span class="plat-name">Instagram • 48.2K</span></div>
+    <div class="plat-pill"><div class="plat-dot" style="background:#1da1f2"></div><span class="plat-name">Twitter/X • 22.1K</span></div>
+    <div class="plat-pill"><div class="plat-dot" style="background:#0a66c2"></div><span class="plat-name">LinkedIn • 11.8K</span></div>
+    <div class="plat-pill"><div class="plat-dot" style="background:#ff0000"></div><span class="plat-name">YouTube • 8.4K</span></div>
+  </div>
+</aside>
+
+<main class="main">
+
+  <!-- OVERVIEW -->
+  <div class="page active" id="dash-overview">
+    <div class="page-head">
+      <div><div class="page-title">Overview</div><div class="page-sub">Your cross-platform performance · Feb 10–17, 2026</div></div>
+      <select class="date-range"><option>Last 7 days</option><option>Last 30 days</option><option>Last 90 days</option></select>
+    </div>
+    <div class="metrics-row">
+      <div class="metric-card mc-ig"><div class="mc-label"><div class="mc-platform-dot" style="background:#e1306c"></div>Instagram Followers</div><div class="mc-number">48,219</div><div class="mc-change up">↑ +1,240 this week</div></div>
+      <div class="metric-card mc-tw"><div class="mc-label"><div class="mc-platform-dot" style="background:#1da1f2"></div>Twitter Impressions</div><div class="mc-number">284K</div><div class="mc-change up">↑ +12% vs last week</div></div>
+      <div class="metric-card mc-li"><div class="mc-label"><div class="mc-platform-dot" style="background:#0a66c2"></div>LinkedIn Connections</div><div class="mc-number">11,804</div><div class="mc-change up">↑ +320 this week</div></div>
+      <div class="metric-card mc-yt"><div class="mc-label"><div class="mc-platform-dot" style="background:#ff0000"></div>YouTube Watch Time</div><div class="mc-number">14.2K</div><div class="mc-change down">↓ -3% vs last week</div></div>
+    </div>
+    <div class="charts-row">
+      <div class="card">
+        <div class="card-head">
+          <h3>Engagement Over Time</h3>
+          <div class="chart-tabs">
+            <button class="ctab active" onclick="switchChart('week',this)">Week</button>
+            <button class="ctab" onclick="switchChart('month',this)">Month</button>
+          </div>
+        </div>
+        <canvas id="engagementChart" height="220"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Platform Breakdown</h3></div>
+        <canvas id="platformChart" height="220"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Key Metrics Summary</h3></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem">
+        ${[['Total Reach','142,000','↑ 8%','var(--violet)'],['Avg. Eng. Rate','4.2%','↑ 0.4pt','var(--green)'],['Link Clicks','3,840','↑ 22%','var(--citrus)'],['New Followers','2,180','↑ 15%','var(--teal)']].map(([l,v,c,col])=>`
+          <div style="text-align:center;background:var(--surface2);border-radius:10px;padding:1rem">
+            <div style="font-size:1.6rem;font-weight:800;color:${col}">${v}</div>
+            <div style="font-size:.7rem;color:var(--text-muted);margin:.2rem 0">${l}</div>
+            <div style="font-size:.7rem;font-weight:700;color:var(--green)">${c}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP POSTS -->
+  <div class="page" id="dash-posts">
+    <div class="page-head">
+      <div><div class="page-title">Top Posts</div><div class="page-sub">Best performing content this month</div></div>
+      <button class="btn-vio">+ Create Post</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+      <div class="card"><div class="card-head"><h3>🔴 Instagram</h3><span style="font-size:.72rem;color:var(--text-muted)">Top 5 posts</span></div><div class="posts-list" id="ig-posts"></div></div>
+      <div class="card"><div class="card-head"><h3>🔵 Twitter/X</h3><span style="font-size:.72rem;color:var(--text-muted)">Top 5 posts</span></div><div class="posts-list" id="tw-posts"></div></div>
+      <div class="card"><div class="card-head"><h3>🔷 LinkedIn</h3><span style="font-size:.72rem;color:var(--text-muted)">Top 5 posts</span></div><div class="posts-list" id="li-posts"></div></div>
+      <div class="card"><div class="card-head"><h3>🔴 YouTube</h3><span style="font-size:.72rem;color:var(--text-muted)">Top 5 posts</span></div><div class="posts-list" id="yt-posts"></div></div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="page" id="dash-schedule">
+    <div class="page-head">
+      <div><div class="page-title">Content Schedule</div><div class="page-sub">Plan and schedule your content for the week</div></div>
+      <button class="btn-vio" onclick="toast('Post composer would open here')">+ New Post</button>
+    </div>
+    <div class="card">
+      <div class="schedule-grid" id="scheduleGrid"></div>
+    </div>
+    <div class="card" style="margin-top:1.1rem">
+      <div class="card-head"><h3>Upcoming Posts</h3></div>
+      <div id="upcomingPosts"></div>
+    </div>
+  </div>
+
+  <!-- AUDIENCE -->
+  <div class="page" id="dash-audience">
+    <div class="page-head">
+      <div><div class="page-title">Audience Insights</div><div class="page-sub">Know your followers better</div></div>
+    </div>
+    <div class="aud-grid">
+      <div class="card"><div class="card-head"><h3>Age Distribution</h3></div><div id="ageChart"></div></div>
+      <div class="card"><div class="card-head"><h3>Gender Split</h3></div><canvas id="genderChart" height="240"></canvas></div>
+      <div class="card"><div class="card-head"><h3>Top Locations</h3></div><div id="locationChart"></div></div>
+      <div class="card"><div class="card-head"><h3>Best Post Times</h3></div><canvas id="timeChart" height="240"></canvas></div>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--violet);color:#fff;padding:.65rem 1.4rem;border-radius:99px;font-size:.82rem;font-weight:700;z-index:999;transition:transform .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(91,33,182,.25)"></div>
+
+<script>
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+// Add show class
+const style = document.createElement('style');
+style.textContent='.toast.show{transform:translateX(-50%) translateY(0)!important}';
+document.head.appendChild(style);
+
+window.showDash = function(p) {
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.snl').forEach(x=>x.classList.remove('active'));
+  document.getElementById('dash-'+p).classList.add('active');
+  document.querySelectorAll('.snl')[['overview','posts','schedule','audience'].indexOf(p)]?.classList.add('active');
+  if(p==='overview') renderCharts();
+  if(p==='posts') renderPosts();
+  if(p==='schedule') renderSchedule();
+  if(p==='audience') renderAudience();
+};
+
+// CHARTS
+let engChartInst, platChartInst;
+function chartOpts(){return{responsive:true,plugins:{legend:{labels:{color:'#4a3870',font:{family:'Manrope',size:11},boxWidth:10}},tooltip:{backgroundColor:'#1a0f35',titleColor:'#fff',bodyColor:'#9a88c0',borderColor:'rgba(91,33,182,.2)',borderWidth:1}},scales:{x:{grid:{color:'rgba(91,33,182,.06)'},ticks:{color:'#9a88c0',font:{family:'Manrope'}}},y:{grid:{color:'rgba(91,33,182,.06)'},ticks:{color:'#9a88c0',font:{family:'Manrope'}}}}}};}
+const weekLabels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const monthLabels = ['Week 1','Week 2','Week 3','Week 4'];
+const weekData = {ig:[3200,2800,4100,3600,5200,6800,4900],tw:[1800,2200,1600,2900,3400,2100,2800],li:[980,1200,1050,1400,1100,780,920]};
+const monthData = {ig:[18000,22000,19500,24000],tw:[12000,14500,11800,16200],li:[4500,5200,4800,6100]};
+
+function renderCharts(){
+  let ctx1=document.getElementById('engagementChart').getContext('2d');
+  let ctx2=document.getElementById('platformChart').getContext('2d');
+  if(engChartInst) engChartInst.destroy();
+  if(platChartInst) platChartInst.destroy();
+  engChartInst=new Chart(ctx1,{type:'line',data:{labels:weekLabels,datasets:[
+    {label:'Instagram',data:weekData.ig,borderColor:'#e1306c',backgroundColor:'rgba(225,48,108,.08)',borderWidth:2,fill:true,tension:.4,pointBackgroundColor:'#e1306c',pointRadius:3},
+    {label:'Twitter',data:weekData.tw,borderColor:'#1da1f2',backgroundColor:'rgba(29,161,242,.08)',borderWidth:2,fill:true,tension:.4,pointBackgroundColor:'#1da1f2',pointRadius:3},
+    {label:'LinkedIn',data:weekData.li,borderColor:'#0a66c2',backgroundColor:'rgba(10,102,194,.05)',borderWidth:2,fill:true,tension:.4,pointBackgroundColor:'#0a66c2',pointRadius:3},
+  ]},options:chartOpts()});
+  platChartInst=new Chart(ctx2,{type:'doughnut',data:{labels:['Instagram','Twitter/X','LinkedIn','YouTube'],datasets:[{data:[48,28,14,10],backgroundColor:['#e1306c','#1da1f2','#0a66c2','#ff0000'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,cutout:'70%',plugins:{legend:{position:'bottom',labels:{color:'#4a3870',font:{family:'Manrope',size:11},boxWidth:10}}}}});
+}
+
+window.switchChart = function(period, btn) {
+  document.querySelectorAll('.ctab').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  const labels = period==='week'?weekLabels:monthLabels;
+  const data = period==='week'?weekData:monthData;
+  if(engChartInst){engChartInst.data.labels=labels;['ig','tw','li'].forEach((k,i)=>engChartInst.data.datasets[i].data=data[k]);engChartInst.update();}
+};
+
+// POSTS
+const POST_DATA = {
+  ig:['Beautiful morning light ✨ New tutorial now live','Behind the scenes of our latest campaign 📸','How to create perfect flat lays — thread 🧵','Weekend mood 🌊 Swipe for more','3 tools that changed my workflow completely'],
+  tw:['Just launched our new dashboard feature! 🚀 Thread...','Hot take: async > sync for creative work. Change my mind.','PSA: The best time to start was yesterday ⚡','Building in public day 47 — what I learned this week','Unpopular opinion: constraints make better design'],
+  li:['5 lessons from building a 50K audience from scratch','Why I quit my agency job to go independent (and doubled income)','The skills no one talks about in product design','How I structure my week as a solo creator','What 2 years of LinkedIn consistency taught me'],
+  yt:['Full Brand Identity Project: Client to Delivery','How to price your creative services in 2026','I redesigned my entire home office — full tour','Adobe vs Figma: honest comparison after 2 years','The tools I use every single day (updated)']
+};
+const COLORS = ['#5b21b6','#7c3aed','#a855f7','#c084fc','#ddd6fe'];
+function renderPosts(){
+  ['ig','tw','li','yt'].forEach(p=>{
+    const eng=[9.2,7.8,8.5,6.4,5.9];
+    document.getElementById(p+'-posts').innerHTML=POST_DATA[p].map((text,i)=>`
+      <div class="post-item">
+        <div class="post-rank" style="background:${COLORS[i]}">${i+1}</div>
+        <div class="post-info"><div class="post-text">${text}</div>
+          <div class="post-meta-row">
+            <div class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>${Math.floor(Math.random()*8000+500).toLocaleString()}</div>
+            <div class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>${Math.floor(Math.random()*3000+200).toLocaleString()}</div>
+          </div>
+        </div>
+        <div class="post-eng"><div class="post-eng-num">${eng[i]}%</div><div class="post-eng-label">Eng. Rate</div></div>
+      </div>`).join('');
+  });
+}
+
+// SCHEDULE
+const DAYS7 = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const SCHEDULED = {1:{posts:['IG: Monday Motivation']},3:{posts:['TW: Product Update Thread','LI: Industry Insight']},5:{posts:['IG: Weekend Tip']},6:{posts:['YT: New Video Drop 🎬']}};
+function renderSchedule(){
+  let html='';
+  DAYS7.forEach(d=>html+=`<div class="sched-day-head">${d}</div>`);
+  DAYS7.forEach((_,i)=>{
+    const sp=SCHEDULED[i];
+    html+=`<div class="sched-slot ${sp?'has-post':''}">
+      ${sp?sp.posts.map(p=>`<div class="sched-post">${p}</div>`).join(''):'<button class="sched-add-btn" onclick="toast(\'Post scheduler would open\')">＋ Add</button>'}
+    </div>`;
+  });
+  document.getElementById('scheduleGrid').innerHTML=html;
+  document.getElementById('upcomingPosts').innerHTML=[
+    {day:'Tuesday',time:'9:00 AM',text:'IG: Morning motivation quote card',platform:'Instagram',col:'#e1306c'},
+    {day:'Wednesday',time:'12:30 PM',text:'TW: Product update announcement thread',platform:'Twitter/X',col:'#1da1f2'},
+    {day:'Wednesday',time:'5:00 PM',text:'LI: Thought leadership article',platform:'LinkedIn',col:'#0a66c2'},
+    {day:'Friday',time:'6:00 PM',text:'IG: Behind the scenes story series',platform:'Instagram',col:'#e1306c'},
+  ].map(p=>`
+    <div style="display:flex;align-items:center;gap:.9rem;padding:.75rem 0;border-bottom:1px solid var(--border)">
+      <div style="width:8px;height:8px;border-radius:50%;background:${p.col};flex-shrink:0"></div>
+      <div style="flex:1;font-size:.82rem;font-weight:600">${p.text}</div>
+      <div style="text-align:right;font-size:.72rem;color:var(--text-muted)">${p.day} · ${p.time}</div>
+    </div>`).join('');
+}
+
+// AUDIENCE
+let gendChart,timeChrt;
+function renderAudience(){
+  const ages=[['18–24',32,'var(--violet)'],['25–34',38,'var(--vio-l)'],['35–44',18,'#a855f7'],['45–54',8,'#c084fc'],['55+',4,'var(--surface2)']];
+  document.getElementById('ageChart').innerHTML=ages.map(([l,v,c])=>`<div class="aud-bar-item"><div class="aud-bar-label"><span>${l}</span><span>${v}%</span></div><div class="aud-track"><div class="aud-fill" style="width:${v}%;background:${c}"></div></div></div>`).join('');
+  const locs=[['United States',42,'var(--violet)'],['United Kingdom',18,'var(--vio-l)'],['Canada',12,'#a855f7'],['Australia',8,'#c084fc'],['Germany',6,'var(--citrus)'],['Other',14,'var(--surface2)']];
+  document.getElementById('locationChart').innerHTML=locs.map(([l,v,c])=>`<div class="aud-bar-item"><div class="aud-bar-label"><span>${l}</span><span>${v}%</span></div><div class="aud-track"><div class="aud-fill" style="width:${v}%;background:${c}"></div></div></div>`).join('');
+  if(gendChart) gendChart.destroy();
+  gendChart=new Chart(document.getElementById('genderChart').getContext('2d'),{type:'doughnut',data:{labels:['Female','Male','Non-binary','Prefer not to say'],datasets:[{data:[54,38,5,3],backgroundColor:['#e1306c','#1da1f2','#a855f7','var(--surface2)'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{color:'#4a3870',font:{family:'Manrope',size:11},boxWidth:10}}}}});
+  if(timeChrt) timeChrt.destroy();
+  timeChrt=new Chart(document.getElementById('timeChart').getContext('2d'),{type:'bar',data:{labels:['6am','9am','12pm','3pm','6pm','9pm'],datasets:[{label:'Engagement',data:[120,380,520,290,780,640],backgroundColor:'rgba(91,33,182,.6)',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(91,33,182,.06)'},ticks:{color:'#9a88c0',font:{family:'Manrope'}}},y:{grid:{color:'rgba(91,33,182,.06)'},ticks:{color:'#9a88c0',font:{family:'Manrope'}}}}}});
+}
+
+renderCharts();
+</script>
+</body>
+</html>

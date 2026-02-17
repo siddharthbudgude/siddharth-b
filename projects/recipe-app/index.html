@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Savor — Recipe & Meal Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-inner">
+    <div class="logo">🌿 Savor</div>
+    <div class="nav-tabs">
+      <button class="ntab active" onclick="showPage('discover')">Discover</button>
+      <button class="ntab" onclick="showPage('planner')">Meal Planner</button>
+      <button class="ntab" onclick="showPage('saved')">Saved <span class="n-badge" id="savedBadge">0</span></button>
+      <button class="ntab" onclick="showPage('shopping')">Shopping List</button>
+    </div>
+    <div class="nav-right">
+      <input type="text" class="search-bar" id="mainSearch" placeholder="🔍 Search recipes, ingredients...">
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- DISCOVER PAGE -->
+  <div class="page active" id="page-discover">
+    <div class="hero-strip">
+      <div class="hero-text">
+        <div class="hero-eyebrow">🌱 Season's Pick</div>
+        <h1>Spring is the time<br>to <em>eat beautifully.</em></h1>
+        <p>Discover over 200 seasonal recipes crafted by chefs worldwide.</p>
+        <button class="btn-herb" onclick="scrollToRecipes()">Explore Recipes ↓</button>
+      </div>
+      <div class="hero-cards">
+        <div class="hero-card" style="--c:#e8f4e8;--r:8deg">🥗<span>Spring Salad</span></div>
+        <div class="hero-card" style="--c:#fef3e2;--r:-5deg">🍋<span>Lemon Pasta</span></div>
+        <div class="hero-card" style="--c:#fce4e4;--r:3deg">🍓<span>Berry Tart</span></div>
+      </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="cat-filter" id="catFilter"></div>
+
+    <!-- Recipes Grid -->
+    <div id="recipesGrid" class="recipes-grid"></div>
+  </div>
+
+  <!-- MEAL PLANNER PAGE -->
+  <div class="page" id="page-planner">
+    <div class="planner-header">
+      <div>
+        <h2 class="page-h">Weekly Meal Planner</h2>
+        <p class="page-sub">Plan your meals for the week ahead</p>
+      </div>
+      <button class="btn-herb" onclick="clearPlanner()">Clear Week</button>
+    </div>
+    <div class="planner-grid" id="plannerGrid"></div>
+  </div>
+
+  <!-- SAVED RECIPES -->
+  <div class="page" id="page-saved">
+    <div class="planner-header">
+      <div>
+        <h2 class="page-h">Saved Recipes</h2>
+        <p class="page-sub">Your personal cookbook</p>
+      </div>
+    </div>
+    <div id="savedGrid" class="recipes-grid"></div>
+    <div class="empty-box" id="savedEmpty" style="display:none">
+      <div class="empty-icon">📖</div>
+      <h3>No saved recipes yet</h3>
+      <p>Bookmark recipes to build your personal collection</p>
+      <button class="btn-herb" onclick="showPage('discover')">Browse Recipes</button>
+    </div>
+  </div>
+
+  <!-- SHOPPING LIST -->
+  <div class="page" id="page-shopping">
+    <div class="planner-header">
+      <div>
+        <h2 class="page-h">Shopping List</h2>
+        <p class="page-sub">Generated from your meal plan</p>
+      </div>
+      <div style="display:flex;gap:.6rem">
+        <button class="btn-outline" onclick="generateShoppingList()">Regenerate from Plan</button>
+        <button class="btn-herb" onclick="addManualItem()">+ Add Item</button>
+      </div>
+    </div>
+    <div class="shopping-layout">
+      <div id="shoppingList"></div>
+      <div class="shopping-sidebar">
+        <div class="shop-card">
+          <h4>🧺 Summary</h4>
+          <div id="shopSummary"></div>
+        </div>
+        <div class="shop-card" style="margin-top:1rem">
+          <h4>💡 Meal Prep Tips</h4>
+          <ul class="prep-tips" id="prepTips"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- RECIPE MODAL -->
+<div class="modal-backdrop" id="recipeModal">
+  <div class="recipe-modal-inner" id="modalInner"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

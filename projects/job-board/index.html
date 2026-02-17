@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Launchpad — Job Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f4f8;--surface:#ffffff;--surface2:#e8edf4;
+  --border:rgba(30,60,100,.1);--border2:rgba(30,60,100,.18);
+  --text:#0f1f35;--text-mid:#3a5a7a;--text-muted:#7a9ab8;
+  --teal:#0d9488;--teal-l:#14b8a8;--teal-bg:rgba(13,148,136,.08);--teal-bg2:rgba(13,148,136,.14);
+  --blue:#1e4a8a;--blue-l:#2563eb;--blue-bg:rgba(30,74,138,.07);
+  --amber:#d97706;--amb-bg:rgba(217,119,6,.1);
+  --rose:#e11d48;--rose-bg:rgba(225,29,72,.08);
+  --r:12px;--shadow:0 2px 14px rgba(15,31,53,.07);--shadow-md:0 6px 28px rgba(15,31,53,.11)
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh}
+/* NAV */
+.topbar{background:var(--blue);padding:0 2rem;position:sticky;top:0;z-index:100}
+.topbar-inner{max-width:1320px;margin:0 auto;height:60px;display:flex;align-items:center;gap:1.5rem}
+.logo{font-size:1.2rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.logo-dot{width:8px;height:8px;background:var(--teal-l);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
+.nav-links{display:flex;gap:.25rem;flex:1}
+.nvl{padding:.4rem .85rem;border-radius:6px;border:none;background:none;color:rgba(255,255,255,.6);font-family:'Plus Jakarta Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s}
+.nvl:hover,.nvl.active{color:#fff;background:rgba(255,255,255,.12)}
+.post-btn{background:var(--teal);color:#fff;border:none;padding:.5rem 1.1rem;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.post-btn:hover{background:var(--teal-l)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--blue) 0%,#1a3a7a 40%,#0a2a6a 100%);padding:3.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-inner{max-width:700px;margin:0 auto;position:relative;z-index:1}
+.hero h1{font-size:2.8rem;font-weight:800;color:#fff;line-height:1.15;margin-bottom:.75rem}
+.hero h1 em{font-family:'Fraunces',serif;font-style:italic;color:var(--teal-l)}
+.hero p{color:rgba(255,255,255,.7);margin-bottom:1.75rem;font-size:1rem}
+.hero-search{display:flex;gap:.5rem;max-width:580px;margin:0 auto}
+.hero-input{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:.8rem 1.1rem;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;outline:none;backdrop-filter:blur(4px)}
+.hero-input::placeholder{color:rgba(255,255,255,.5)}
+.hero-input:focus{border-color:var(--teal-l);background:rgba(255,255,255,.18)}
+.hero-search-btn{background:var(--teal);color:#fff;border:none;padding:.8rem 1.5rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s}
+.hero-search-btn:hover{background:var(--teal-l)}
+.hero-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:1.75rem;flex-wrap:wrap}
+.hstat{color:rgba(255,255,255,.8);text-align:center}
+.hstat strong{display:block;font-size:1.5rem;font-weight:800;color:#fff}
+.hstat span{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;opacity:.7}
+
+/* LAYOUT */
+.content{max-width:1320px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:260px 1fr;gap:1.5rem;align-items:start}
+/* FILTERS */
+.filters-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;box-shadow:var(--shadow);position:sticky;top:76px}
+.filter-section{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.filter-section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.filter-title{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:.65rem}
+.filter-option{display:flex;align-items:center;gap:.6rem;padding:.3rem 0;cursor:pointer;font-size:.82rem;color:var(--text-mid);transition:color .15s}
+.filter-option:hover{color:var(--teal)}
+.filter-option input{accent-color:var(--teal);width:14px;height:14px}
+.filter-chip{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .75rem;border-radius:6px;border:1.5px solid var(--border2);background:var(--surface2);font-size:.75rem;font-weight:600;color:var(--text-mid);cursor:pointer;margin:.2rem .2rem .2rem 0;transition:all .2s}
+.filter-chip:hover,.filter-chip.active{background:var(--teal);border-color:var(--teal);color:#fff}
+.clear-btn{background:none;border:none;color:var(--text-muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:.75rem;cursor:pointer;padding:.25rem 0;text-decoration:underline}
+.clear-btn:hover{color:var(--rose)}
+
+/* JOB LIST */
+.jobs-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
+.jobs-count{font-size:.875rem;font-weight:600;color:var(--text-mid)}
+.sort-select{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:.4rem .8rem;color:var(--text-mid);font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;outline:none;cursor:pointer}
+
+.job-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.4rem;margin-bottom:.9rem;box-shadow:var(--shadow);transition:all .25s;cursor:pointer;display:flex;gap:1.1rem;align-items:flex-start;position:relative}
+.job-card:hover{border-color:var(--teal);box-shadow:var(--shadow-md);transform:translateX(2px)}
+.job-card.featured{border-color:var(--teal);border-left:3px solid var(--teal)}
+.company-logo{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;border:1px solid var(--border)}
+.job-info{flex:1;min-width:0}
+.job-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.3rem;flex-wrap:wrap}
+.job-title{font-size:.975rem;font-weight:700;color:var(--text);line-height:1.3}
+.job-meta{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:.5rem;font-size:.75rem;color:var(--text-muted)}
+.job-company{font-weight:700;color:var(--blue)}
+.job-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+.jtag{font-size:.65rem;font-weight:700;padding:.2rem .55rem;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.jtag-type-full{background:var(--teal-bg2);color:var(--teal)}
+.jtag-type-part{background:var(--amb-bg);color:var(--amber)}
+.jtag-type-cont{background:var(--blue-bg);color:var(--blue)}
+.jtag-remote{background:#f0fdf4;color:#166534}
+.jtag-hybrid{background:#eff6ff;color:#1d4ed8}
+.jtag-onsite{background:var(--rose-bg);color:var(--rose)}
+.jtag-feat{background:var(--teal);color:#fff}
+.jtag-new{background:var(--rose);color:#fff}
+.job-salary{font-weight:700;color:var(--teal);font-size:.82rem;white-space:nowrap}
+.job-posted{font-size:.7rem;color:var(--text-muted)}
+.bookmark-btn{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--text-muted);transition:all .2s;padding:.2rem;flex-shrink:0}
+.bookmark-btn:hover,.bookmark-btn.bookmarked{color:var(--amber)}
+
+/* JOB MODAL */
+.job-modal-overlay{position:fixed;inset:0;background:rgba(10,20,35,.55);backdrop-filter:blur(8px);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto}
+.job-modal-overlay.open{display:flex}
+.job-modal{background:var(--surface);border-radius:16px;max-width:700px;width:100%;margin:auto;box-shadow:0 20px 60px rgba(10,20,35,.25);animation:modalIn .28s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(-14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.jm-header{background:linear-gradient(135deg,var(--blue),#0a2a6a);padding:2rem;border-radius:16px 16px 0 0;position:relative}
+.jm-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center}
+.jm-close:hover{background:rgba(255,255,255,.25)}
+.jm-company-row{display:flex;align-items:center;gap:.9rem;margin-bottom:.9rem}
+.jm-logo{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2)}
+.jm-title{font-size:1.5rem;font-weight:800;color:#fff;margin-bottom:.25rem}
+.jm-company{color:rgba(255,255,255,.75);font-size:.875rem}
+.jm-meta-row{display:flex;gap:.65rem;flex-wrap:wrap}
+.jm-body{padding:1.75rem 2rem 2rem}
+.jm-section{margin-bottom:1.4rem}
+.jm-section h4{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem}
+.jm-section p{font-size:.875rem;line-height:1.7;color:var(--text-mid)}
+.req-list{display:flex;flex-direction:column;gap:.45rem}
+.req-item{display:flex;gap:.6rem;align-items:flex-start;font-size:.85rem;color:var(--text-mid)}
+.req-item::before{content:'✓';color:var(--teal);font-weight:800;flex-shrink:0;margin-top:1px}
+.skill-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+.skill-tag{background:var(--teal-bg2);color:var(--teal);padding:.3rem .75rem;border-radius:6px;font-size:.75rem;font-weight:700}
+.jm-actions{display:flex;gap:.65rem;margin-top:1.5rem;flex-wrap:wrap}
+.apply-btn{background:var(--teal);color:#fff;border:none;padding:.8rem 2rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s}
+.apply-btn:hover{background:var(--teal-l);transform:translateY(-1px)}
+.save-job-btn{background:var(--surface2);border:1px solid var(--border2);color:var(--text-mid);padding:.8rem 1.2rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.save-job-btn:hover{border-color:var(--amber);color:var(--amber)}
+
+/* TABS FOR JOB PAGE */
+.page{display:none;animation:fadeUp .3s ease}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.saved-jobs-grid{max-width:1320px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.no-saved{text-align:center;padding:4rem;color:var(--text-muted)}
+.no-saved .ni{font-size:3rem;margin-bottom:1rem}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--blue);color:#fff;padding:.65rem 1.4rem;border-radius:99px;font-size:.82rem;font-weight:600;z-index:999;transition:transform .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(15,31,53,.25)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:900px){.content{grid-template-columns:1fr}.filters-panel{position:static}}
+@media(max-width:600px){.hero h1{font-size:1.8rem}.hero-search{flex-direction:column}.hero-stats{gap:1.5rem}}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <div class="logo"><div class="logo-dot"></div>Launchpad</div>
+    <div class="nav-links">
+      <button class="nvl active" onclick="showJobPage('browse')">Browse Jobs</button>
+      <button class="nvl" onclick="showJobPage('saved')">Saved Jobs <span id="savedJobBadge" style="background:var(--teal);color:#fff;font-size:.6rem;padding:.1rem .4rem;border-radius:99px;display:none">0</span></button>
+    </div>
+    <button class="post-btn">Post a Job</button>
+  </div>
+</nav>
+
+<div class="page active" id="jobpage-browse">
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>Find your next <em>great role.</em></h1>
+      <p>Browse curated opportunities from top companies. Your dream job is closer than you think.</p>
+      <div class="hero-search">
+        <input type="text" class="hero-input" id="jobSearch" placeholder="Job title, skill, or company...">
+        <input type="text" class="hero-input" id="locSearch" placeholder="📍 Location or Remote" style="flex:0 0 180px">
+        <button class="hero-search-btn" onclick="renderJobs()">Search</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><strong>2,840</strong><span>Open Roles</span></div>
+        <div class="hstat"><strong>1,200+</strong><span>Companies</span></div>
+        <div class="hstat"><strong>98%</strong><span>Response Rate</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <aside class="filters-panel">
+      <div class="filter-section">
+        <div class="filter-title">Job Type</div>
+        <div id="typeFilters"></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-title">Work Mode</div>
+        <div id="modeFilters"></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-title">Category</div>
+        <div id="catFilters"></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-title">Experience</div>
+        <div id="expFilters"></div>
+      </div>
+      <button class="clear-btn" onclick="clearFilters()">Clear all filters</button>
+    </aside>
+
+    <div>
+      <div class="jobs-header">
+        <div class="jobs-count" id="jobsCount">Loading jobs...</div>
+        <select class="sort-select" id="sortSelect" onchange="renderJobs()">
+          <option value="newest">Newest First</option>
+          <option value="salary">Highest Salary</option>
+          <option value="relevant">Most Relevant</option>
+        </select>
+      </div>
+      <div id="jobsList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="jobpage-saved">
+  <div style="padding:2rem 2rem 1rem;max-width:1320px;margin:0 auto">
+    <h2 style="font-size:1.75rem;font-weight:800;color:var(--text)">Saved Jobs</h2>
+    <p style="color:var(--text-muted);margin-top:.25rem">Jobs you've bookmarked</p>
+  </div>
+  <div id="savedJobsList" class="saved-jobs-grid"></div>
+</div>
+
+<div class="job-modal-overlay" id="jobModal">
+  <div class="job-modal" id="jobModalInner"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const JOBS = [
+  {id:1,title:"Senior Frontend Engineer",company:"Stripe",logo:"💳",location:"San Francisco, CA",remote:"Remote",type:"Full-time",category:"Engineering",exp:"Senior",salary:"$160k–$200k",posted:"2 days ago",featured:true,isNew:false,skills:["React","TypeScript","GraphQL","CSS"],desc:"Join Stripe's product team to build the interfaces that power the global economy. You'll work on high-impact user-facing features used by millions.",requirements:["5+ years frontend experience","Expert-level React and TypeScript","Strong design sense and eye for detail","Experience with performance optimization"]},
+  {id:2,title:"Product Designer",company:"Notion",logo:"📝",location:"New York, NY",remote:"Hybrid",type:"Full-time",category:"Design",exp:"Mid-level",salary:"$130k–$160k",posted:"1 day ago",featured:false,isNew:true,skills:["Figma","Prototyping","Design Systems","User Research"],desc:"Shape the future of how knowledge workers think, write, and organize. You'll design core product features and contribute to Notion's design system.",requirements:["3+ years product design experience","Mastery of Figma","Portfolio showing end-to-end design process","Experience working with engineers"]},
+  {id:3,title:"Backend Engineer — Payments",company:"Shopify",logo:"🛍️",location:"Ottawa, Canada",remote:"Remote",type:"Full-time",category:"Engineering",exp:"Senior",salary:"$150k–$185k",posted:"3 days ago",featured:true,isNew:false,skills:["Ruby","Go","PostgreSQL","Kafka"],desc:"Build and scale payment infrastructure for millions of merchants globally. You'll work on critical systems that process billions in transactions.",requirements:["4+ years backend experience","Experience with high-throughput systems","Solid understanding of payments domain","Strong system design skills"]},
+  {id:4,title:"Growth Marketing Manager",company:"Linear",logo:"📐",location:"San Francisco, CA",remote:"Hybrid",type:"Full-time",category:"Marketing",exp:"Mid-level",salary:"$110k–$140k",posted:"5 days ago",featured:false,isNew:false,skills:["SEO","Content Strategy","Analytics","A/B Testing"],desc:"Drive Linear's go-to-market strategy. Own growth experiments across acquisition, activation, and retention to grow our developer user base.",requirements:["3+ years growth/marketing experience","Strong analytical mindset","Experience with B2B SaaS","Familiarity with developer tools market"]},
+  {id:5,title:"iOS Engineer",company:"Duolingo",logo:"🦜",location:"Pittsburgh, PA",remote:"Hybrid",type:"Full-time",category:"Engineering",exp:"Senior",salary:"$145k–$175k",posted:"1 week ago",featured:false,isNew:false,skills:["Swift","SwiftUI","Core Data","Animations"],desc:"Build delightful mobile learning experiences for over 50 million daily active learners. You'll own key features in Duolingo's top-rated iOS app.",requirements:["4+ years iOS development","Proficiency in Swift and SwiftUI","Experience shipping consumer apps","Interest in animation and polish"]},
+  {id:6,title:"Data Scientist — Recommendations",company:"Spotify",logo:"🎵",location:"Stockholm, Sweden",remote:"Hybrid",type:"Full-time",category:"Data",exp:"Mid-level",salary:"$120k–$155k",posted:"4 days ago",featured:false,isNew:true,skills:["Python","ML","Spark","SQL"],desc:"Work on Spotify's recommendation systems and help 600M+ users discover music they'll love. You'll run experiments and build ML models at scale.",requirements:["3+ years data science experience","Strong ML fundamentals","Experience with recommender systems","Python proficiency"]},
+  {id:7,title:"DevOps Engineer",company:"Vercel",logo:"▲",location:"Remote",remote:"Remote",type:"Full-time",category:"Engineering",exp:"Mid-level",salary:"$135k–$165k",posted:"2 days ago",featured:false,isNew:true,skills:["Kubernetes","Terraform","AWS","CI/CD"],desc:"Scale Vercel's globally distributed edge infrastructure. You'll work on the platform that powers millions of web deployments every day.",requirements:["3+ years DevOps/platform engineering","Deep Kubernetes knowledge","Infrastructure-as-code expertise","Strong incident response experience"]},
+  {id:8,title:"UX Researcher",company:"Figma",logo:"🎨",location:"San Francisco, CA",remote:"Hybrid",type:"Full-time",category:"Design",exp:"Mid-level",salary:"$115k–$145k",posted:"6 days ago",featured:false,isNew:false,skills:["User Research","Usability Testing","Surveys","Data Analysis"],desc:"Help Figma understand the needs of designers worldwide. You'll run mixed-methods research and advocate for users in product decisions.",requirements:["3+ years UX research experience","Expertise in qualitative methods","Experience translating insights to action","Strong communication skills"]},
+  {id:9,title:"Content Writer — Technical",company:"Tailwind CSS",logo:"🌬️",location:"Remote",remote:"Remote",type:"Contract",category:"Marketing",exp:"Entry-level",salary:"$70k–$90k",posted:"3 days ago",featured:false,isNew:false,skills:["Technical Writing","CSS","React","SEO"],desc:"Create educational content, docs, and tutorials for the Tailwind CSS ecosystem. Help developers fall in love with utility-first CSS.",requirements:["Strong writing skills","Hands-on CSS experience","Ability to explain complex concepts clearly","Experience with documentation tools"]},
+  {id:10,title:"Engineering Manager",company:"Airbnb",logo:"🏠",location:"San Francisco, CA",remote:"Hybrid",type:"Full-time",category:"Engineering",exp:"Lead",salary:"$200k–$250k",posted:"1 week ago",featured:true,isNew:false,skills:["Team Leadership","System Design","React","Node.js"],desc:"Lead a team of 6-8 engineers building Airbnb's core booking experience. Balance technical excellence with people development and product delivery.",requirements:["7+ years engineering experience","2+ years people management","Strong technical background","Experience with high-scale systems"]},
+  {id:11,title:"Brand Designer",company:"Loom",logo:"🎬",location:"San Francisco, CA",remote:"Remote",type:"Full-time",category:"Design",exp:"Mid-level",salary:"$105k–$130k",posted:"2 weeks ago",featured:false,isNew:false,skills:["Illustrator","Motion Design","Brand Identity","Figma"],desc:"Shape how the world perceives Loom. You'll own everything from visual identity to campaigns to motion graphics for one of the fastest-growing async video tools.",requirements:["3+ years brand design","Strong illustration or motion skills","Portfolio showing holistic brand work","Understanding of digital marketing"]},
+  {id:12,title:"Frontend Engineer — Design Systems",company:"GitHub",logo:"🐙",location:"Remote",remote:"Remote",type:"Full-time",category:"Engineering",exp:"Senior",salary:"$155k–$185k",posted:"5 days ago",featured:false,isNew:false,skills:["React","Accessibility","CSS","Storybook"],desc:"Build and maintain Primer, GitHub's design system used by 1000+ engineers. Influence how millions of developers experience GitHub every day.",requirements:["5+ years frontend engineering","Deep accessibility expertise","Experience building design systems","Open source contributions a plus"]},
+];
+
+const TYPE_OPTIONS = ["Full-time","Part-time","Contract","Internship"];
+const MODE_OPTIONS = ["Remote","Hybrid","On-site"];
+const CAT_OPTIONS = ["Engineering","Design","Marketing","Data","Product"];
+const EXP_OPTIONS = ["Entry-level","Mid-level","Senior","Lead"];
+
+let filters = { type:[], mode:[], cat:[], exp:[] };
+let savedJobs = JSON.parse(localStorage.getItem('lp_saved')) || [];
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+window.showJobPage = function(p) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.nvl').forEach(x => x.classList.remove('active'));
+  document.getElementById('jobpage-' + p).classList.add('active');
+  document.querySelectorAll('.nvl')[['browse','saved'].indexOf(p)]?.classList.add('active');
+  if (p === 'saved') renderSavedJobs();
+};
+
+function renderFilterPanel() {
+  const make = (items, key) => items.map(item =>
+    `<div class="filter-option" onclick="toggleFilter('${key}','${item}')">
+      <input type="checkbox" ${filters[key].includes(item)?'checked':''} readonly>
+      <span>${item}</span>
+    </div>`
+  ).join('');
+  document.getElementById('typeFilters').innerHTML = make(TYPE_OPTIONS,'type');
+  document.getElementById('modeFilters').innerHTML = make(MODE_OPTIONS,'mode');
+  document.getElementById('catFilters').innerHTML = make(CAT_OPTIONS,'cat');
+  document.getElementById('expFilters').innerHTML = make(EXP_OPTIONS,'exp');
+}
+
+window.toggleFilter = function(key, val) {
+  if (filters[key].includes(val)) filters[key] = filters[key].filter(x=>x!==val);
+  else filters[key].push(val);
+  renderFilterPanel();
+  renderJobs();
+};
+
+window.clearFilters = function() {
+  filters = { type:[], mode:[], cat:[], exp:[] };
+  document.getElementById('jobSearch').value = '';
+  document.getElementById('locSearch').value = '';
+  renderFilterPanel();
+  renderJobs();
+};
+
+window.renderJobs = function() {
+  const q = document.getElementById('jobSearch').value.toLowerCase();
+  const loc = document.getElementById('locSearch').value.toLowerCase();
+  const sort = document.getElementById('sortSelect').value;
+
+  let jobs = JOBS.filter(j => {
+    const qMatch = !q || j.title.toLowerCase().includes(q) || j.company.toLowerCase().includes(q) || j.skills.some(s=>s.toLowerCase().includes(q));
+    const locMatch = !loc || j.location.toLowerCase().includes(loc) || j.remote.toLowerCase().includes(loc);
+    const typeMatch = !filters.type.length || filters.type.includes(j.type);
+    const modeMatch = !filters.mode.length || filters.mode.includes(j.remote);
+    const catMatch = !filters.cat.length || filters.cat.includes(j.category);
+    const expMatch = !filters.exp.length || filters.exp.includes(j.exp);
+    return qMatch && locMatch && typeMatch && modeMatch && catMatch && expMatch;
+  });
+
+  if (sort === 'salary') jobs.sort((a,b) => parseInt(b.salary.replace(/\D/g,'').slice(0,6)) - parseInt(a.salary.replace(/\D/g,'').slice(0,6)));
+  else if (sort === 'newest') jobs.sort((a,b) => a.posted.localeCompare(b.posted));
+
+  document.getElementById('jobsCount').textContent = `${jobs.length} job${jobs.length!==1?'s':''} found`;
+  document.getElementById('jobsList').innerHTML = jobs.length ? jobs.map(j => jobCardHTML(j)).join('') : `<div style="text-align:center;padding:3rem;color:var(--text-muted)"><div style="font-size:2.5rem;margin-bottom:1rem">🔍</div><strong>No jobs match your filters.</strong><br><span style="font-size:.875rem">Try adjusting your search.</span></div>`;
+};
+
+function jobCardHTML(j) {
+  const isBookmarked = savedJobs.includes(j.id);
+  const modeClass = {Remote:'jtag-remote',Hybrid:'jtag-hybrid','On-site':'jtag-onsite'}[j.remote] || '';
+  const typeClass = {['Full-time']:'jtag-type-full',['Part-time']:'jtag-type-part','Contract':'jtag-type-cont'}[j.type] || 'jtag-type-full';
+  return `<div class="job-card ${j.featured?'featured':''}" onclick="openJobModal(${j.id})">
+    <div class="company-logo" style="background:${['#e8f5ec','#fef3e2','#e8f0fe','#fce8e8','#f0fdf4'][j.id%5]}">${j.logo}</div>
+    <div class="job-info">
+      <div class="job-top">
+        <div>
+          <div class="job-title">${j.title}</div>
+          <div class="job-meta">
+            <span class="job-company">${j.company}</span>
+            <span>📍 ${j.location}</span>
+            <span class="job-posted">${j.posted}</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+          <span class="job-salary">${j.salary}</span>
+          <button class="bookmark-btn ${isBookmarked?'bookmarked':''}" onclick="toggleBookmark(event,${j.id})">${isBookmarked?'🔖':'🏷️'}</button>
+        </div>
+      </div>
+      <div class="job-tags">
+        ${j.featured?'<span class="jtag jtag-feat">⭐ Featured</span>':''}
+        ${j.isNew?'<span class="jtag jtag-new">New</span>':''}
+        <span class="jtag ${typeClass}">${j.type}</span>
+        <span class="jtag ${modeClass}">${j.remote}</span>
+        <span class="jtag" style="background:var(--blue-bg);color:var(--blue)">${j.category}</span>
+        ${j.skills.slice(0,2).map(s=>`<span class="jtag" style="background:var(--surface2);color:var(--text-mid)">${s}</span>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+window.toggleBookmark = function(e, id) {
+  e.stopPropagation();
+  if (savedJobs.includes(id)) { savedJobs = savedJobs.filter(x=>x!==id); toast('Removed from saved jobs'); }
+  else { savedJobs.push(id); toast('Job saved! 🔖'); }
+  localStorage.setItem('lp_saved', JSON.stringify(savedJobs));
+  updateSavedBadge();
+  renderJobs();
+};
+
+function updateSavedBadge() {
+  const b = document.getElementById('savedJobBadge');
+  b.textContent = savedJobs.length;
+  b.style.display = savedJobs.length ? 'inline' : 'none';
+}
+
+function renderSavedJobs() {
+  const jobs = JOBS.filter(j => savedJobs.includes(j.id));
+  document.getElementById('savedJobsList').innerHTML = jobs.length
+    ? `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1rem">${jobs.map(j=>jobCardHTML(j)).join('')}</div>`
+    : `<div class="no-saved"><div class="ni">🏷️</div><h3 style="color:var(--text);margin-bottom:.4rem">No saved jobs yet</h3><p>Bookmark jobs to review them later</p></div>`;
+}
+
+window.openJobModal = function(id) {
+  const j = JOBS.find(x=>x.id===id);
+  const modeClass = {Remote:'jtag-remote',Hybrid:'jtag-hybrid','On-site':'jtag-onsite'}[j.remote] || '';
+  const typeClass = {['Full-time']:'jtag-type-full',['Part-time']:'jtag-type-part','Contract':'jtag-type-cont'}[j.type] || 'jtag-type-full';
+  document.getElementById('jobModalInner').innerHTML = `
+    <div class="jm-header">
+      <button class="jm-close" onclick="closeJobModal()">✕</button>
+      <div class="jm-company-row">
+        <div class="jm-logo">${j.logo}</div>
+        <div>
+          <div class="jm-title">${j.title}</div>
+          <div class="jm-company">${j.company} · ${j.location}</div>
+        </div>
+      </div>
+      <div class="jm-meta-row">
+        ${j.featured?'<span class="jtag jtag-feat">⭐ Featured</span>':''}
+        <span class="jtag ${typeClass}">${j.type}</span>
+        <span class="jtag ${modeClass}">${j.remote}</span>
+        <span class="jtag" style="background:rgba(255,255,255,.15);color:#fff">${j.exp}</span>
+        <span style="color:var(--teal-l);font-weight:800;font-size:.875rem">${j.salary}</span>
+      </div>
+    </div>
+    <div class="jm-body">
+      <div class="jm-section"><h4>About the Role</h4><p>${j.desc}</p></div>
+      <div class="jm-section"><h4>Requirements</h4><div class="req-list">${j.requirements.map(r=>`<div class="req-item">${r}</div>`).join('')}</div></div>
+      <div class="jm-section"><h4>Skills & Technologies</h4><div class="skill-tags">${j.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div></div>
+      <div class="jm-section"><h4>Details</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;font-size:.82rem">
+          <div><span style="color:var(--text-muted)">Posted:</span> <strong>${j.posted}</strong></div>
+          <div><span style="color:var(--text-muted)">Category:</span> <strong>${j.category}</strong></div>
+          <div><span style="color:var(--text-muted)">Experience:</span> <strong>${j.exp}</strong></div>
+          <div><span style="color:var(--text-muted)">Work Mode:</span> <strong>${j.remote}</strong></div>
+        </div>
+      </div>
+      <div class="jm-actions">
+        <button class="apply-btn" onclick="toast('Application submitted! ✓ Good luck 🤞')">Apply Now →</button>
+        <button class="save-job-btn" onclick="toggleBookmark(event,${j.id});document.getElementById('jobModal').classList.remove('open')">🔖 ${savedJobs.includes(j.id)?'Unsave':'Save Job'}</button>
+      </div>
+    </div>`;
+  document.getElementById('jobModal').classList.add('open');
+};
+
+window.closeJobModal = function() { document.getElementById('jobModal').classList.remove('open'); };
+document.getElementById('jobModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeJobModal(); });
+document.getElementById('jobSearch').addEventListener('input', renderJobs);
+document.getElementById('locSearch').addEventListener('input', renderJobs);
+
+renderFilterPanel();
+renderJobs();
+updateSavedBadge();
+</script>
+</body>
+</html>
