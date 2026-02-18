@@ -22,7 +22,7 @@ const skillsData = [
   { id: 4, image: `${process.env.PUBLIC_URL}/images/react-logo.png`, name: 'React.js', category: 'front-end' },
   { id: 5, image: `${process.env.PUBLIC_URL}/images/jquery-logo.png`, name: 'Jquery', category: 'front-end' },
   { id: 6, image: `${process.env.PUBLIC_URL}/images/bootstrap-5-logo.png`, name: 'Bootstrap', category: 'front-end' },
-  { id: 7, image: `${process.env.PUBLIC_URL}/images/tailwind-css-logo.png`, name: 'Tailwind CSS', category: 'front-end' },
+  { id: 7, image: `${process.env.PUBLIC_URL}/images/tailwind-css-logo.png`, name: 'Tailwind CSSS', category: 'front-end' },
   { id: 8, image: `${process.env.PUBLIC_URL}/images/figma-logo.png`, name: 'Figma', category: 'designing' },
   { id: 9, image: `${process.env.PUBLIC_URL}/images/canva-logo.png`, name: 'Canva', category: 'designing' },
   { id: 10, image: `${process.env.PUBLIC_URL}/images/wordpress-logo.png`, name: 'WordPress', category: 'cms' },
