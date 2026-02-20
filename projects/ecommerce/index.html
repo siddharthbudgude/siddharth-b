@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAISON — Luxury Boutique</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Josefin+Sans:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <div class="ann-bar">Free shipping on orders over $150 · <em>New Arrivals</em> — Spring Collection Now Live</div>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-links">
+        <button class="nav-link active" onclick="goPage('shop')">Shop</button>
+        <button class="nav-link" onclick="goPage('wishlist')">Wishlist <span id="wishCount"
+            style="font-size:.6rem;background:var(--sand-bg2);padding:.1rem .4rem;border-radius:3px;color:var(--esp-l)">0</span></button>
+        <button class="nav-link" onclick="goPage('about')">Our Story</button>
+      </div>
+      <div class="nav-logo">Maison</div>
+      <div class="nav-right">
+        <button class="nav-icon-btn" onclick="toggleSearch()">🔍</button>
+        <button class="nav-icon-btn" onclick="goPage('wishlist')">♡</button>
+        <button class="nav-icon-btn" onclick="toggleCart()">
+          🛍
+          <span class="cart-count" id="cartCount" style="display:none">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SHOP PAGE -->
+  <div class="page active" id="page-shop">
+    <div class="hero">
+      <div class="hero-left">
+        <span class="hero-left-emoji">👜</span>
+        <span class="hero-badge">New Season</span>
+      </div>
+      <div class="hero-right">
+        <div class="hero-season">Spring / Summer 2026</div>
+        <h1 class="hero-h">Crafted for<br>the <em>effortlessly</em><br>elegant.</h1>
+        <p class="hero-desc">Timeless pieces designed for the modern wardrobe. Every stitch tells a story of quality,
+          intention, and understated luxury.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="scrollToShop()">Shop the Collection</button>
+          <button class="btn-ghost-w" onclick="goPage('about')">Our Story</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-strip">
+      <div class="cat-strip-title">Shop by Category</div>
+      <div class="cat-strip-grid" id="catStrip"></div>
+    </div>
+
+    <div class="shop-section" id="shopSection">
+      <div class="shop-header">
+        <div class="shop-title" id="shopTitle">All Products</div>
+        <div class="shop-controls">
+          <select class="sort-sel" id="sortSel" onchange="renderProducts()">
+            <option value="default">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+            <option value="rating">Top Rated</option>
+          </select>
+          <div class="view-toggle">
+            <button class="vt-btn active" id="gridViewBtn" onclick="setView('grid')">⊞</button>
+            <button class="vt-btn" id="listViewBtn" onclick="setView('list')">☰</button>
+          </div>
+        </div>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </div>
+
+  <!-- WISHLIST PAGE -->
+  <div class="page" id="page-wishlist">
+    <div class="page-inner">
+      <div class="page-ttl">Your Wishlist</div>
+      <div class="page-sub" id="wishSubtitle">Items you've saved for later</div>
+      <div class="products-grid" id="wishGrid"></div>
+      <div id="wishEmpty" style="display:none;text-align:center;padding:4rem;color:var(--text-muted)">
+        <div style="font-size:3rem;margin-bottom:1rem">♡</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--espresso);margin-bottom:.5rem">
+          Your wishlist is empty</h3>
+        <p style="margin-bottom:1.5rem">Save pieces you love for later</p>
+        <button class="btn-primary" onclick="goPage('shop')" style="display:inline-block">Browse Collection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT PAGE -->
+  <div class="page" id="page-about">
+    <div style="max-width:800px;margin:0 auto;padding:5rem 2.5rem;text-align:center">
+      <div
+        style="font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sand);margin-bottom:1rem">
+        Est. 2018 · Paris</div>
+      <h2
+        style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:400;color:var(--espresso);line-height:1.1;margin-bottom:1.5rem">
+        A house built on <em style="font-style:italic">quiet luxury.</em></h2>
+      <p style="color:var(--text-mid);line-height:1.9;margin-bottom:1.5rem;font-size:.95rem">Maison was founded on a
+        simple belief: that exceptional quality should feel effortless. Every piece in our collection is designed to
+        transcend trends, crafted from materials sourced from the finest ateliers in Europe and Japan.</p>
+      <p style="color:var(--text-mid);line-height:1.9;margin-bottom:2.5rem;font-size:.95rem">We work with artisans who
+        share our commitment to longevity — creating clothes that become more beautiful with time, and stories worth
+        passing on.</p>
+      <button class="btn-primary" style="background:var(--espresso);color:#fff" onclick="goPage('shop')">Shop the
+        Collection</button>
+    </div>
+  </div>
+
+  <div class="footer-strip">
+    <div class="footer-logo">Maison</div>
+    <div>© 2026 Maison. All rights reserved.</div>
+    <div style="display:flex;gap:1.5rem">
+      <span style="cursor:pointer;transition:color .2s" onmouseover="this.style.color='var(--sand-l)'"
+        onmouseout="this.style.color=''">Instagram</span>
+      <span style="cursor:pointer;transition:color .2s" onmouseover="this.style.color='var(--sand-l)'"
+        onmouseout="this.style.color=''">Pinterest</span>
+      <span style="cursor:pointer;transition:color .2s" onmouseover="this.style.color='var(--sand-l)'"
+        onmouseout="this.style.color=''">Journal</span>
+    </div>
+  </div>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <div class="cart-panel" id="cartPanel">
+    <div class="cart-head">
+      <div class="cart-head-title">Your Bag <span
+          style="font-size:.8rem;color:var(--text-muted);font-family:'Josefin Sans',sans-serif;letter-spacing:.06em"
+          id="cartItemCount">(0 items)</span></div>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-foot" id="cartFoot" style="display:none">
+      <div class="cart-summary">
+        <div class="cart-sum-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+        <div class="cart-sum-row"><span>Shipping</span><span style="color:var(--gold)">Free</span></div>
+        <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+      </div>
+      <button class="checkout-btn" onclick="toast('Checkout flow would proceed here ✓')">Proceed to Checkout</button>
+      <div class="pay-icons">💳 Visa · Mastercard · Amex · Apple Pay</div>
+    </div>
+  </div>
+
+  <!-- PRODUCT MODAL -->
+  <div class="prod-modal-overlay" id="prodModal">
+    <div class="prod-modal" id="prodModalInner"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const PRODUCTS = [
+      { id: 1, name: 'Oversized Linen Blazer', brand: 'Maison Atelier', category: 'Clothing', price: 385, oldPrice: null, emoji: '🧥', bg: '#f0e8d8', badge: 'New', rating: 4.9, reviews: 42, desc: 'Relaxed fit blazer in 100% Belgian linen. Unlined for effortless drape. Available in four seasonal colorways.', colors: ['#e8d8c4', '#2c1a08', '#7a9e8a', '#c0604a'], sizes: ['XS', 'S', 'M', 'L', 'XL'], isNew: true },
+      { id: 2, name: 'Silk Slip Midi Dress', brand: 'Maison Atelier', category: 'Clothing', price: 420, oldPrice: 560, emoji: '👗', bg: '#f5e8e0', badge: 'Sale', rating: 4.8, reviews: 87, desc: 'Bias-cut silk charmeuse midi dress with adjustable spaghetti straps. Dry clean only.', colors: ['#c8a87a', '#1c1008', '#e8c4b0'], sizes: ['XS', 'S', 'M', 'L'], isNew: false },
+      { id: 3, name: 'Raffia Tote Bag', brand: 'Maison Home', category: 'Bags', price: 195, oldPrice: null, emoji: '👜', bg: '#ede5d8', badge: 'Bestseller', rating: 4.7, reviews: 156, desc: 'Hand-woven raffia tote with leather handles and cotton canvas lining. A summer staple.', colors: ['#c8a87a', '#2c1a08'], sizes: ['One Size'], isNew: false },
+      { id: 4, name: 'Cashmere Ribbed Knit', brand: 'Maison Atelier', category: 'Clothing', price: 295, oldPrice: null, emoji: '🧶', bg: '#f8f0e8', badge: 'New', rating: 4.9, reviews: 63, desc: 'Grade-A Mongolian cashmere in a relaxed ribbed knit. Ethically sourced and hand-finished.', colors: ['#f9f5f0', '#c8a87a', '#6b4c2a', '#4a6a5a'], sizes: ['XS', 'S', 'M', 'L', 'XL'], isNew: true },
+      { id: 5, name: 'Leather Ankle Boots', brand: 'Maison Shoes', category: 'Shoes', price: 445, oldPrice: null, emoji: '👢', bg: '#e8ddd0', badge: null, rating: 4.8, reviews: 95, desc: 'Full-grain Italian leather boots with a 4cm block heel. Cushioned insole for all-day comfort.', colors: ['#2c1a08', '#1c1c1c', '#8b6a48'], sizes: ['36', '37', '38', '39', '40', '41'], isNew: false },
+      { id: 6, name: 'Sculptural Gold Earrings', brand: 'Maison Jewels', category: 'Jewellery', price: 165, oldPrice: null, emoji: '💛', bg: '#fdf5e0', badge: 'Bestseller', rating: 5.0, reviews: 38, desc: 'Hand-poured 18k gold-plated brass. Each pair is unique with slight variations in form.', colors: ['#b8922c'], sizes: ['One Size'], isNew: false },
+      { id: 7, name: 'Wide-Leg Linen Trousers', brand: 'Maison Atelier', category: 'Clothing', price: 265, oldPrice: 320, emoji: '👖', bg: '#f0e8d8', badge: 'Sale', rating: 4.6, reviews: 72, desc: 'High-waisted wide-leg trousers in pre-washed linen. Side zip fastening.', colors: ['#e8d8c4', '#2c1a08', '#7a9e8a'], sizes: ['XS', 'S', 'M', 'L'], isNew: false },
+      { id: 8, name: 'Mini Leather Crossbody', brand: 'Maison Home', category: 'Bags', price: 285, oldPrice: null, emoji: '👝', bg: '#e8ddd0', badge: 'New', rating: 4.7, reviews: 29, desc: 'Pebbled leather crossbody with adjustable chain strap. Fits a phone, cards and keys.', colors: ['#2c1a08', '#c8a87a', '#c0604a'], sizes: ['One Size'], isNew: true },
+      { id: 9, name: 'Ceramic Mug Set (2)', brand: 'Maison Home', category: 'Home', price: 65, oldPrice: null, emoji: '☕', bg: '#f5ede8', badge: null, rating: 4.9, reviews: 204, desc: 'Hand-thrown stoneware mugs with a reactive glaze. Each piece is uniquely beautiful.', colors: ['#e8ddd0', '#6b4c2a', '#7a9e8a'], sizes: ['One Size'], isNew: false },
+      { id: 10, name: 'Linen Cushion Cover', brand: 'Maison Home', category: 'Home', price: 58, oldPrice: null, emoji: '🛋️', bg: '#f0ece4', badge: null, rating: 4.8, reviews: 147, desc: 'French stonewashed linen cushion cover with hidden zip. 50x50cm.', colors: ['#f9f5f0', '#e8d8c4', '#6b4c2a'], sizes: ['50x50cm'], isNew: false },
+      { id: 11, name: 'Hammam Towel', brand: 'Maison Home', category: 'Home', price: 75, oldPrice: null, emoji: '🏖️', bg: '#faf5ee', badge: 'Bestseller', rating: 4.9, reviews: 312, desc: 'Traditional Turkish pestemal in a cotton-bamboo blend. Gets softer with every wash.', colors: ['#e8d8c4', '#7a9e8a', '#c8a87a', '#4a6a5a'], sizes: ['One Size'], isNew: false },
+      { id: 12, name: 'Sterling Silver Necklace', brand: 'Maison Jewels', category: 'Jewellery', price: 120, oldPrice: null, emoji: '📿', bg: '#f5f0e8', badge: 'New', rating: 4.8, reviews: 18, desc: 'Delicate sterling silver chain with a single freshwater pearl pendant. 45cm length.', colors: ['#d0d0c8'], sizes: ['One Size'], isNew: true },
+    ];
+
+    const CATS = [{ name: 'All', emoji: '✦', count: 12 }, { name: 'Clothing', emoji: '👗', count: 5 }, { name: 'Bags', emoji: '👜', count: 2 }, { name: 'Shoes', emoji: '👢', count: 1 }, { name: 'Jewellery', emoji: '💛', count: 2 }, { name: 'Home', emoji: '🏡', count: 3 }];
+    let activeCat = 'All', viewMode = 'grid';
+    let cart = JSON.parse(localStorage.getItem('maison_cart')) || [];
+    let wishlist = JSON.parse(localStorage.getItem('maison_wish')) || [];
+
+    function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500) }
+    function save() { localStorage.setItem('maison_cart', JSON.stringify(cart)); localStorage.setItem('maison_wish', JSON.stringify(wishlist)) }
+
+    function goPage(p) {
+      document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
+      document.getElementById('page-' + p).classList.add('active');
+      const idx = { shop: 0, wishlist: 1, about: 2 }[p];
+      document.querySelectorAll('.nav-link')[idx]?.classList.add('active');
+      if (p === 'wishlist') renderWishlist();
+    }
+
+    // CATEGORIES
+    document.getElementById('catStrip').innerHTML = CATS.map(c => `
+  <div class="cat-tile ${c.name === activeCat ? 'active-cat' : ''}" onclick="setCat('${c.name}',this)">
+    <div class="cat-tile-emoji">${c.emoji}</div>
+    <div class="cat-tile-name">${c.name}</div>
+    <div class="cat-tile-count">${c.count} items</div>
+  </div>`).join('');
+
+    window.setCat = function (name, el) {
+      activeCat = name;
+      document.querySelectorAll('.cat-tile').forEach(x => x.classList.remove('active-cat'));
+      el.classList.add('active-cat');
+      document.getElementById('shopTitle').textContent = name === 'All' ? 'All Products' : name;
+      renderProducts();
+    };
+
+    window.setView = function (v) {
+      viewMode = v;
+      document.getElementById('gridViewBtn').classList.toggle('active', v === 'grid');
+      document.getElementById('listViewBtn').classList.toggle('active', v === 'list');
+      renderProducts();
+    };
+
+    window.scrollToShop = function () { document.getElementById('shopSection').scrollIntoView({ behavior: 'smooth' }) };
+
+    window.renderProducts = function () {
+      const sort = document.getElementById('sortSel').value;
+      let list = PRODUCTS.filter(p => activeCat === 'All' || p.category === activeCat);
+      if (sort === 'price-asc') list = [...list].sort((a, b) => a.price - b.price);
+      else if (sort === 'price-desc') list = [...list].sort((a, b) => b.price - a.price);
+      else if (sort === 'newest') list = [...list].sort((a, b) => b.isNew - a.isNew);
+      else if (sort === 'rating') list = [...list].sort((a, b) => b.rating - a.rating);
+      const grid = document.getElementById('productsGrid');
+      grid.className = 'products-grid' + (viewMode === 'list' ? ' list-view' : '');
+      grid.innerHTML = list.map(p => productCardHTML(p)).join('');
+    };
+
+    function productCardHTML(p) {
+      const inWish = wishlist.includes(p.id);
+      const saleInfo = p.oldPrice ? ` <span class="pc-price-old">$${p.oldPrice}</span><span class="pc-sale-pct">-${Math.round((1 - p.price / p.oldPrice) * 100)}%</span>` : '';
+      return `<div class="product-card" onclick="openProduct(${p.id})">
+    <div class="pc-image" style="background:${p.bg}">
+      <span>${p.emoji}</span>
+      ${p.badge ? `<span class="pc-badge pc-badge-${p.badge.toLowerCase() === 'new' ? 'new' : p.badge.toLowerCase() === 'sale' ? 'sale' : 'bestseller'}">${p.badge}</span>` : ''}
+      <button class="pc-wish ${inWish ? 'wished' : ''}" onclick="toggleWish(event,${p.id})">${inWish ? '❤️' : '♡'}</button>
+      <button class="pc-quick-add" onclick="addToCart(event,${p.id})">Add to Bag</button>
+    </div>
+    <div class="pc-info">
+      <div class="pc-brand">${p.brand}</div>
+      <div class="pc-name">${p.name}</div>
+      <div class="pc-price-row"><span class="pc-price">$${p.price}</span>${saleInfo}</div>
+      <div class="pc-rating"><span class="stars">${'★'.repeat(Math.round(p.rating))}</span>${p.rating} (${p.reviews})</div>
+    </div>
+  </div>`;
+    }
+
+    window.toggleWish = function (e, id) {
+      e.stopPropagation();
+      if (wishlist.includes(id)) { wishlist = wishlist.filter(x => x !== id); toast('Removed from wishlist') }
+      else { wishlist.push(id); toast('Saved to wishlist ♡') }
+      save(); updateWishBadge(); renderProducts();
+    };
+
+    function updateWishBadge() { document.getElementById('wishCount').textContent = wishlist.length }
+
+    window.addToCart = function (e, id) {
+      e.stopPropagation();
+      const p = PRODUCTS.find(x => x.id === id);
+      const existing = cart.find(x => x.id === id);
+      if (existing) existing.qty++;
+      else cart.push({ id, name: p.name, brand: p.brand, price: p.price, emoji: p.emoji, bg: p.bg, qty: 1, size: p.sizes[0], color: p.colors[0] });
+      save(); updateCartBadge(); toast(`"${p.name}" added to bag 🛍`);
+    };
+
+    function updateCartBadge() {
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      const b = document.getElementById('cartCount');
+      b.textContent = total; b.style.display = total ? 'flex' : 'none';
+      document.getElementById('cartItemCount').textContent = `(${total} item${total !== 1 ? 's' : ''})`;
+    }
+
+    window.openProduct = function (id) {
+      const p = PRODUCTS.find(x => x.id === id);
+      const swatches = p.colors.map((c, i) => `<div class="swatch ${i === 0 ? 'active' : ''}" style="background:${c}" onclick="this.parentNode.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));this.classList.add('active')"></div>`).join('');
+      const sizes = p.sizes.map((s, i) => `<button class="size-btn ${i === 0 ? 'active' : ''}" onclick="document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">${s}</button>`).join('');
+      document.getElementById('prodModalInner').innerHTML = `
+    <div class="pm-image" style="background:${p.bg}">
+      <span>${p.emoji}</span>
+      <button class="pm-close" onclick="closeProdModal()">✕</button>
+    </div>
+    <div class="pm-body">
+      <div class="pm-brand">${p.brand}</div>
+      <div class="pm-name">${p.name}</div>
+      <div class="pm-price">$${p.price}${p.oldPrice ? ` <span style="font-size:.85rem;color:var(--text-muted);text-decoration:line-through;font-family:'Josefin Sans',sans-serif">$${p.oldPrice}</span>` : ''}</div>
+      <div class="pm-rating"><span class="stars">${'★'.repeat(Math.round(p.rating))}</span> ${p.rating} · ${p.reviews} reviews</div>
+      <div class="pm-desc">${p.desc}</div>
+      <div class="pm-section-label">Colour</div>
+      <div class="color-swatches">${swatches}</div>
+      <div class="pm-section-label">Size</div>
+      <div class="size-btns">${sizes}</div>
+      <button class="pm-add-btn" onclick="addToCart(event,${id});closeProdModal()">Add to Bag — $${p.price}</button>
+    </div>`;
+      document.getElementById('prodModal').classList.add('open');
+    };
+
+    window.closeProdModal = function () { document.getElementById('prodModal').classList.remove('open') };
+    document.getElementById('prodModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeProdModal() });
+
+    // CART
+    window.toggleCart = function () {
+      document.getElementById('cartOverlay').classList.toggle('open');
+      document.getElementById('cartPanel').classList.toggle('open');
+      renderCart();
+    };
+
+    function renderCart() {
+      const body = document.getElementById('cartBody');
+      const foot = document.getElementById('cartFoot');
+      if (!cart.length) {
+        body.innerHTML = `<div class="cart-empty"><span class="cart-empty-icon">🛍</span><h4>Your bag is empty</h4><p style="font-size:.82rem">Add something beautiful</p></div>`;
+        foot.style.display = 'none'; return;
+      }
+      foot.style.display = 'block';
+      body.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="ci-img" style="background:${item.bg}">${item.emoji}</div>
+      <div class="ci-info">
+        <div class="ci-brand">${item.brand}</div>
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-meta">Size: ${item.size}</div>
+        <div class="ci-qty-row">
+          <button class="qty-btn" onclick="updateQty(${item.id},-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty(${item.id},1)">+</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between">
+        <button class="ci-remove" onclick="removeFromCart(${item.id})">✕</button>
+        <div class="ci-price">$${(item.price * item.qty).toFixed(2)}</div>
+      </div>
+    </div>`).join('');
+      const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      document.getElementById('cartSubtotal').textContent = `$${sub.toFixed(2)}`;
+      document.getElementById('cartTotal').textContent = `$${sub.toFixed(2)}`;
+    }
+
+    window.updateQty = function (id, delta) {
+      const item = cart.find(x => x.id === id);
+      if (item) { item.qty = Math.max(1, item.qty + delta); save(); updateCartBadge(); renderCart() }
+    };
+    window.removeFromCart = function (id) { cart = cart.filter(x => x.id !== id); save(); updateCartBadge(); renderCart() };
+
+    // WISHLIST PAGE
+    function renderWishlist() {
+      const grid = document.getElementById('wishGrid');
+      const empty = document.getElementById('wishEmpty');
+      const sub = document.getElementById('wishSubtitle');
+      const items = PRODUCTS.filter(p => wishlist.includes(p.id));
+      sub.textContent = `${items.length} saved item${items.length !== 1 ? 's' : ''}`;
+      if (!items.length) { grid.innerHTML = ''; empty.style.display = 'block'; return }
+      empty.style.display = 'none';
+      grid.innerHTML = items.map(p => productCardHTML(p)).join('');
+    }
+
+    window.toggleSearch = function () { toast('Search functionality would open here') };
+
+    updateCartBadge(); updateWishBadge(); renderProducts();
+  </script>
+</body>
+
+</html>
