@@ -2,7 +2,6 @@
   "name": "codestar",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://siddharthbudgude.github.io/siddharth-b",
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
@@ -14,6 +13,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
+    "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
     "swiper": "^11.2.2",
     "typewriter-effect": "^2.21.0",
@@ -44,9 +44,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "react-router-dom": "^6.27.0"
   }
-
 }
