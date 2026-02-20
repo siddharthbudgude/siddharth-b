@@ -18,16 +18,16 @@ const Footer = () => {
             </p>
             {/* Social Media Links */}
             <div className="mt-4">
-              <a href="#" target='_blank' className="btn btn-outline-light btn-floating m-1">
+              <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-floating m-1">
                 <i className="fab fa-facebook-f"></i>
               </a>
-              <a href="#" target='_blank' className="btn btn-outline-light btn-floating m-1">
+              <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-floating m-1">
                 <i class="fa-brands fa-github"></i>
               </a>
-              <a href="#" target='_blank' className="btn btn-outline-light btn-floating m-1">
+              <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-floating m-1">
                 <i className="fab fa-instagram"></i>
               </a>
-              <a href="#" target='_blank' className="btn btn-outline-light btn-floating m-1">
+              <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-floating m-1">
                 <i className="fab fa-linkedin-in"></i>
               </a>
             </div>
@@ -91,7 +91,7 @@ const Footer = () => {
                   placeholder="Enter your email"
                   aria-label="Enter your email"
                 />
-                <button className="btn btn-outline-light" type="button">
+                <button className="btn btn-outline-light" type="button" onClick={handleClick} style={{background:'none', border:'none', cursor:'pointer'}}>
                   Subscribe
                 </button>
               </div>
@@ -104,9 +104,9 @@ const Footer = () => {
           <div className="col-12 text-center border-top pt-4">
             <p>
               © {currentYear} Copyright:&nbsp;
-              <a href="#" className="text-white text-decoration-none">
+              <span className="text-white text-decoration-none">
               Designed & Developed by Siddharth
-              </a>
+              </span>
             </p>
           </div>
         </div>
