@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeDesk — Virtual Stock Market</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap"><div class="ticker" id="ticker"></div></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">TD</div>
+    <div><div class="logo-text">TradeDesk</div><span class="logo-sub">Virtual Market Simulator</span></div>
+  </div>
+  <div class="nav-tabs">
+    <button class="ntab active" onclick="goTab('trading')">Trading</button>
+    <button class="ntab" onclick="goTab('leaderboard')">Leaderboard</button>
+    <button class="ntab" onclick="goTab('news')">Market News</button>
+  </div>
+  <div class="portfolio-bar">
+    <div class="pb-item"><span class="pb-label">Portfolio Value</span><span class="pb-val" id="portfolioVal" style="color:var(--green)">$100,000.00</span></div>
+    <div class="pb-item"><span class="pb-label">Day P&L</span><span class="pb-val" id="dayPnl" style="color:var(--green)">+$0.00</span></div>
+    <div class="pb-item"><span class="pb-label">Cash</span><span class="pb-val" id="cashBal" style="color:var(--text-muted)">$100,000.00</span></div>
+    <div>
+      <div class="mkt-status"><div class="mkt-dot"></div>Market Open</div>
+      <div class="clock" id="clock">09:30 AM</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRADING PAGE -->
+<div class="page active" id="tab-trading">
+  <div class="app-body">
+
+    <!-- WATCHLIST -->
+    <div class="watchlist-panel">
+      <div class="panel-head"><span class="panel-title">Watchlist</span><button class="panel-action" onclick="toast('Watchlist manager','info')">Edit</button></div>
+      <input type="text" class="search-input" id="wlSearch" placeholder="Search symbol..." oninput="filterWatchlist()">
+      <div class="watchlist-items" id="watchlistItems"></div>
+    </div>
+
+    <!-- CHART AREA -->
+    <div class="chart-area">
+      <div class="chart-header">
+        <div>
+          <div class="ch-stock">
+            <span class="ch-sym" id="chSym">AAPL</span>
+            <span class="ch-name" id="chName">Apple Inc.</span>
+            <span class="ch-price" id="chPrice">$0.00</span>
+            <span class="ch-chg up" id="chChg">+0.00 (+0.00%)</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem">
+          <div class="tf-buttons" id="tfButtons">
+            <button class="tf-btn active" onclick="setTF('1D',this)">1D</button>
+            <button class="tf-btn" onclick="setTF('1W',this)">1W</button>
+            <button class="tf-btn" onclick="setTF('1M',this)">1M</button>
+            <button class="tf-btn" onclick="setTF('3M',this)">3M</button>
+            <button class="tf-btn" onclick="setTF('1Y',this)">1Y</button>
+          </div>
+        </div>
+      </div>
+      <div class="chart-canvas-wrap"><canvas id="stockChart"></canvas></div>
+      <div class="chart-stats-row">
+        <div class="cstat"><span class="cstat-label">Open</span><span class="cstat-val" id="statOpen">—</span></div>
+        <div class="cstat"><span class="cstat-label">High</span><span class="cstat-val" id="statHigh" style="color:var(--green)">—</span></div>
+        <div class="cstat"><span class="cstat-label">Low</span><span class="cstat-val" id="statLow" style="color:var(--red)">—</span></div>
+        <div class="cstat"><span class="cstat-label">Volume</span><span class="cstat-val" id="statVol">—</span></div>
+        <div class="cstat"><span class="cstat-label">Mkt Cap</span><span class="cstat-val" id="statCap">—</span></div>
+        <div class="cstat"><span class="cstat-label">52W Range</span><span class="cstat-val" id="stat52w">—</span></div>
+      </div>
+    </div>
+
+    <!-- TRADE PANEL -->
+    <div class="trade-panel">
+      <div class="tab-row">
+        <button class="trade-tab active" onclick="setTradeTab('order',this)">Order</button>
+        <button class="trade-tab" onclick="setTradeTab('positions',this)">Positions</button>
+        <button class="trade-tab" onclick="setTradeTab('orders',this)">Orders</button>
+      </div>
+
+      <!-- ORDER FORM -->
+      <div id="trade-order" class="trade-body">
+        <div class="buy-sell-toggle">
+          <button class="bs-btn buy active" id="buyBtn" onclick="setBuySell('buy')">BUY</button>
+          <button class="bs-btn sell" id="sellBtn" onclick="setBuySell('sell')">SELL</button>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label class="form-label">Symbol</label>
+          <input type="text" class="form-input" id="orderSym" value="AAPL" style="text-transform:uppercase">
+        </div>
+        <div>
+          <label class="form-label">Order Type</label>
+          <div class="order-type-row" id="orderTypeRow">
+            <button class="ot-btn active" onclick="setOT('Market',this)">Market</button>
+            <button class="ot-btn" onclick="setOT('Limit',this)">Limit</button>
+            <button class="ot-btn" onclick="setOT('Stop',this)">Stop</button>
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Shares</label>
+          <input type="number" class="form-input" id="orderShares" value="10" min="1" oninput="updateOrderSummary()">
+        </div>
+        <div id="limitPriceGroup" style="display:none">
+          <label class="form-label">Limit Price</label>
+          <input type="number" class="form-input" id="limitPrice" placeholder="0.00" step="0.01" oninput="updateOrderSummary()">
+        </div>
+        <div class="order-summary" id="orderSummary">
+          <div class="os-row"><span class="os-label">Price</span><span id="oPrice">—</span></div>
+          <div class="os-row"><span class="os-label">Shares</span><span id="oShares">—</span></div>
+          <div class="os-row"><span class="os-label">Est. Total</span><span id="oTotal">—</span></div>
+          <div class="os-row"><span class="os-label">Available Cash</span><span id="oCash">—</span></div>
+        </div>
+        <button class="place-btn buy-btn" id="placeOrderBtn" onclick="placeOrder()">PLACE BUY ORDER</button>
+      </div>
+
+      <!-- POSITIONS -->
+      <div id="trade-positions" class="trade-body" style="display:none">
+        <div id="positionsList"></div>
+        <div id="noPositions" style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.78rem;font-family:var(--font-mono)">No open positions yet.<br>Place your first trade!</div>
+      </div>
+
+      <!-- ORDERS HISTORY -->
+      <div id="trade-orders" class="trade-body" style="display:none">
+        <div id="ordersList"></div>
+        <div id="noOrders" style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.78rem;font-family:var(--font-mono)">No orders yet.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LEADERBOARD PAGE -->
+<div class="page" id="tab-leaderboard">
+  <div class="lb-page">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.25rem">
+      <div>
+        <h2 style="font-family:var(--font-mono);font-size:1.1rem;color:var(--green);margin-bottom:.2rem">// LEADERBOARD</h2>
+        <div style="font-size:.75rem;color:var(--text-muted)">Starting capital: $100,000 · Virtual competition</div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:.72rem;color:var(--text-muted)">Season 3 · Feb 2026</div>
+    </div>
+    <table class="lb-table" id="lbTable"></table>
+  </div>
+</div>
+
+<!-- NEWS PAGE -->
+<div class="page" id="tab-news">
+  <div class="news-page" id="newsFeed"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STOCKS = {
+  AAPL:{name:'Apple Inc.',price:189.45,change:2.34,changePct:1.25,open:187.20,high:190.12,low:186.80,vol:'58.2M',cap:'$2.94T',w52:'$164.08 — $199.62',color:'#00dc78'},
+  MSFT:{name:'Microsoft Corp.',price:415.82,change:5.18,changePct:1.26,open:411.00,high:417.50,low:410.22,vol:'22.1M',cap:'$3.09T',w52:'$366.50 — $430.82',color:'#00dc78'},
+  TSLA:{name:'Tesla Inc.',price:248.75,change:-8.40,changePct:-3.27,open:256.50,high:257.80,low:247.10,vol:'91.4M',cap:'$793B',w52:'$138.80 — $299.29',color:'#ff4d4d'},
+  NVDA:{name:'NVIDIA Corp.',price:875.40,change:22.60,changePct:2.65,open:853.00,high:880.20,low:850.40,vol:'44.8M',cap:'$2.15T',w52:'$462.28 — $974.00',color:'#00dc78'},
+  AMZN:{name:'Amazon.com Inc.',price:182.90,change:1.20,changePct:0.66,open:181.50,high:184.20,low:180.80,vol:'34.6M',cap:'$1.91T',w52:'$118.35 — $201.20',color:'#00dc78'},
+  GOOGL:{name:'Alphabet Inc.',price:175.60,change:-2.10,changePct:-1.18,open:177.80,high:178.40,low:174.90,vol:'27.3M',cap:'$2.18T',w52:'$130.67 — $193.31',color:'#ff4d4d'},
+  META:{name:'Meta Platforms',price:524.80,change:12.30,changePct:2.40,open:512.50,high:526.70,low:511.20,vol:'18.9M',cap:'$1.33T',w52:'$394.78 — $589.00',color:'#00dc78'},
+  AMD:{name:'Adv. Micro Devices',price:178.20,change:-4.80,changePct:-2.62,open:183.10,high:184.00,low:177.40,vol:'52.7M',cap:'$288B',w52:'$147.42 — $227.30',color:'#ff4d4d'},
+  JPM:{name:'JPMorgan Chase',price:198.45,change:1.85,changePct:0.94,open:196.70,high:199.20,low:196.00,vol:'10.2M',cap:'$572B',w52:'$155.02 — $220.82',color:'#00dc78'},
+  BRK:{name:'Berkshire Hathaway',price:395.20,change:3.40,changePct:0.87,open:391.80,high:396.00,low:391.00,vol:'3.8M',cap:'$865B',w52:'$340.00 — $412.00',color:'#00dc78'},
+  NFLX:{name:'Netflix Inc.',price:692.40,change:-15.60,changePct:-2.20,open:708.00,high:710.20,low:690.80,vol:'5.4M',cap:'$298B',w52:'$549.51 — $741.09',color:'#ff4d4d'},
+  COIN:{name:'Coinbase Global',price:225.80,change:18.40,changePct:8.87,open:207.80,high:228.50,low:206.20,vol:'14.2M',cap:'$57B',w52:'$51.00 — $283.00',color:'#00dc78'},
+};
+
+let selectedSym='AAPL', buySell='buy', orderType='Market', currentTF='1D';
+let cash=100000, positions={}, orderHistory=[], dayPnl=0;
+let chartInst=null;
+
+const fmtCur=(n)=>'$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtNum=(n)=>n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+// LOAD STATE
+const saved=JSON.parse(localStorage.getItem('td_state')||'{}');
+if(saved.cash) cash=saved.cash;
+if(saved.positions) positions=saved.positions;
+if(saved.orders) orderHistory=saved.orders;
+if(saved.dayPnl) dayPnl=saved.dayPnl;
+
+function saveState(){localStorage.setItem('td_state',JSON.stringify({cash,positions,orders:orderHistory,dayPnl}));}
+
+// CLOCK
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clock').textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+}
+updateClock();setInterval(updateClock,1000);
+
+// PRICE SIMULATION - live ticks
+function simulatePrices(){
+  Object.keys(STOCKS).forEach(sym=>{
+    const s=STOCKS[sym];
+    const move=(Math.random()-.48)*s.price*.003;
+    s.price=Math.max(1,+(s.price+move).toFixed(2));
+    s.change=+(s.price-s.open).toFixed(2);
+    s.changePct=+((s.change/s.open)*100).toFixed(2);
+    s.color=s.change>=0?'#00dc78':'#ff4d4d';
+  });
+  updateWatchlist();
+  updateChHeader();
+  updatePortfolio();
+  updateTicker();
+}
+setInterval(simulatePrices,2000);
+
+// TICKER TAPE
+function updateTicker(){
+  const syms=Object.keys(STOCKS);
+  const items=syms.concat(syms).map(sym=>{
+    const s=STOCKS[sym];
+    const cls=s.change>=0?'up':'dn';
+    const sign=s.change>=0?'+':'';
+    return `<div class="tick-item"><span class="tick-sym">${sym}</span><span class="tick-price">${fmtCur(s.price)}</span><span class="tick-chg ${cls}">${sign}${s.changePct.toFixed(2)}%</span></div>`;
+  }).join('');
+  document.getElementById('ticker').innerHTML=items+items;
+}
+updateTicker();
+
+// WATCHLIST
+function updateWatchlist(){
+  const q=(document.getElementById('wlSearch')?.value||'').toUpperCase();
+  const syms=Object.keys(STOCKS).filter(s=>!q||s.includes(q)||STOCKS[s].name.toUpperCase().includes(q));
+  document.getElementById('watchlistItems').innerHTML=syms.map(sym=>{
+    const s=STOCKS[sym];
+    const cls=s.change>=0?'up':'dn';
+    const sign=s.change>=0?'+':'';
+    return `<div class="wl-item ${sym===selectedSym?'selected':''}" onclick="selectStock('${sym}')">
+      <span class="wl-sym">${sym}</span>
+      <div class="wl-name">${s.name}</div>
+      <div class="wl-right">
+        <div class="wl-price" style="color:${s.color}">${fmtCur(s.price)}</div>
+        <div class="wl-chg ${cls}">${sign}${s.changePct.toFixed(2)}%</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+window.filterWatchlist=updateWatchlist;
+updateWatchlist();
+
+// SELECT STOCK
+window.selectStock=function(sym){
+  selectedSym=sym;
+  document.getElementById('orderSym').value=sym;
+  updateChHeader();
+  updateWatchlist();
+  drawChart();
+  updateOrderSummary();
+};
+
+function updateChHeader(){
+  const s=STOCKS[selectedSym];
+  const cls=s.change>=0?'up':'dn';
+  const sign=s.change>=0?'+':'';
+  document.getElementById('chSym').textContent=selectedSym;
+  document.getElementById('chName').textContent=s.name;
+  document.getElementById('chPrice').textContent=fmtCur(s.price);
+  document.getElementById('chChg').textContent=`${sign}${fmtNum(s.change)} (${sign}${s.changePct.toFixed(2)}%)`;
+  document.getElementById('chChg').className=`ch-chg ${cls}`;
+  document.getElementById('statOpen').textContent=fmtCur(s.open);
+  document.getElementById('statHigh').textContent=fmtCur(s.high);
+  document.getElementById('statLow').textContent=fmtCur(s.low);
+  document.getElementById('statVol').textContent=s.vol;
+  document.getElementById('statCap').textContent=s.cap;
+  document.getElementById('stat52w').textContent=s.w52;
+}
+updateChHeader();
+
+// CHART
+function genPriceData(base,points,volatility=0.015){
+  let arr=[base];
+  for(let i=1;i<points;i++){
+    const chg=(Math.random()-.485)*arr[arr.length-1]*volatility;
+    arr.push(Math.max(1,+(arr[arr.length-1]+chg).toFixed(2)));
+  }
+  return arr;
+}
+
+function drawChart(){
+  const s=STOCKS[selectedSym];
+  const tfConfig={
+    '1D':{pts:78,labels:Array.from({length:78},(_,i)=>{const h=9+Math.floor(i/4+i*.5/78);const m=(i*5+30)%60;return `${h}:${m.toString().padStart(2,'0')}`;})},
+    '1W':{pts:35,labels:['Mon','Tue','Wed','Thu','Fri'].flatMap(d=>['9:30','12:00','3:30','4:00','Close'].map(t=>d))},
+    '1M':{pts:22,labels:Array.from({length:22},(_,i)=>`Jan ${i+1}`)},
+    '3M':{pts:65,labels:Array.from({length:65},(_,i)=>`Day ${i+1}`)},
+    '1Y':{pts:252,labels:Array.from({length:252},(_,i)=>`Day ${i+1}`)},
+  };
+  const cfg=tfConfig[currentTF];
+  const vol={'1D':.008,'1W':.015,'1M':.02,'3M':.018,'1Y':.016}[currentTF];
+  const data=genPriceData(s.price*.95,cfg.pts,vol);
+  data[data.length-1]=s.price;
+  const isUp=data[data.length-1]>=data[0];
+  const col=isUp?'#00dc78':'#ff4d4d';
+
+  if(chartInst) chartInst.destroy();
+  chartInst=new Chart(document.getElementById('stockChart').getContext('2d'),{
+    type:'line',
+    data:{
+      labels:cfg.labels,
+      datasets:[{
+        data,borderColor:col,backgroundColor:col+'12',borderWidth:2,fill:true,
+        tension:.3,pointRadius:0,pointHoverRadius:4,pointHoverBackgroundColor:col
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,animation:{duration:400},
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,backgroundColor:'#0d1626',titleColor:col,bodyColor:'#7a98b5',borderColor:'rgba(0,220,120,.2)',borderWidth:1,callbacks:{title:([item])=>item.label,label:(item)=>`$${fmtNum(item.raw)}`}}},
+      scales:{
+        x:{grid:{color:'rgba(0,220,120,.05)'},ticks:{color:'#405570',font:{family:'IBM Plex Mono',size:9},maxTicksLimit:8}},
+        y:{grid:{color:'rgba(0,220,120,.05)'},ticks:{color:'#405570',font:{family:'IBM Plex Mono',size:9},callback:v=>'$'+v.toFixed(0)},position:'right'}
+      }
+    }
+  });
+}
+drawChart();
+
+window.setTF=function(tf,btn){
+  currentTF=tf;
+  document.querySelectorAll('.tf-btn').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  drawChart();
+};
+
+// PORTFOLIO
+function updatePortfolio(){
+  let totalVal=cash;
+  Object.keys(positions).forEach(sym=>{
+    if(STOCKS[sym]) totalVal+=positions[sym].shares*STOCKS[sym].price;
+  });
+  document.getElementById('portfolioVal').textContent=fmtCur(totalVal);
+  document.getElementById('cashBal').textContent=fmtCur(cash);
+  const pnl=totalVal-100000;
+  const pnlEl=document.getElementById('dayPnl');
+  pnlEl.textContent=(pnl>=0?'+':'')+fmtCur(pnl);
+  pnlEl.style.color=pnl>=0?'var(--green)':'var(--red)';
+}
+updatePortfolio();
+
+// ORDER FORM
+window.setBuySell=function(side){
+  buySell=side;
+  document.getElementById('buyBtn').classList.toggle('active',side==='buy');
+  document.getElementById('sellBtn').classList.toggle('active',side==='sell');
+  document.getElementById('placeOrderBtn').textContent=`PLACE ${side.toUpperCase()} ORDER`;
+  document.getElementById('placeOrderBtn').className=`place-btn ${side}-btn`;
+  updateOrderSummary();
+};
+
+window.setOT=function(type,btn){
+  orderType=type;
+  document.querySelectorAll('.ot-btn').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('limitPriceGroup').style.display=type!=='Market'?'block':'none';
+  updateOrderSummary();
+};
+
+window.updateOrderSummary=function(){
+  const sym=(document.getElementById('orderSym')?.value||selectedSym).toUpperCase();
+  const s=STOCKS[sym];
+  const shares=parseInt(document.getElementById('orderShares')?.value)||0;
+  if(!s||!shares){document.getElementById('oPrice').textContent='—';return;}
+  const price=orderType==='Market'?s.price:parseFloat(document.getElementById('limitPrice')?.value||s.price)||s.price;
+  const total=price*shares;
+  document.getElementById('oPrice').textContent=fmtCur(price);
+  document.getElementById('oShares').textContent=shares.toLocaleString();
+  document.getElementById('oTotal').textContent=fmtCur(total);
+  document.getElementById('oCash').textContent=fmtCur(cash);
+};
+updateOrderSummary();
+
+window.placeOrder=function(){
+  const sym=(document.getElementById('orderSym').value||selectedSym).toUpperCase();
+  const s=STOCKS[sym];
+  if(!s){toast('Unknown symbol','info');return;}
+  const shares=parseInt(document.getElementById('orderShares').value)||0;
+  if(shares<=0){toast('Enter a valid share count','info');return;}
+  const price=orderType==='Market'?s.price:parseFloat(document.getElementById('limitPrice').value)||s.price;
+  const total=price*shares;
+
+  if(buySell==='buy'){
+    if(total>cash){toast('Insufficient funds','info');return;}
+    cash-=total;
+    if(!positions[sym]) positions[sym]={shares:0,avgCost:0};
+    const p=positions[sym];
+    p.avgCost=(p.avgCost*p.shares+price*shares)/(p.shares+shares);
+    p.shares+=shares;
+    toast(`Bought ${shares} ${sym} @ $${price.toFixed(2)}`,'buy');
+  } else {
+    if(!positions[sym]||positions[sym].shares<shares){toast('Insufficient shares','info');return;}
+    cash+=total;
+    positions[sym].shares-=shares;
+    if(positions[sym].shares===0) delete positions[sym];
+    toast(`Sold ${shares} ${sym} @ $${price.toFixed(2)}`,'sell');
+  }
+
+  orderHistory.unshift({sym,side:buySell,shares,price,total,time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),status:'filled'});
+  saveState();updatePortfolio();updateOrderSummary();renderPositions();renderOrdersList();
+};
+
+function renderPositions(){
+  const list=document.getElementById('positionsList');
+  const none=document.getElementById('noPositions');
+  const syms=Object.keys(positions).filter(s=>positions[s].shares>0);
+  none.style.display=syms.length?'none':'block';
+  list.innerHTML=syms.map(sym=>{
+    const p=positions[sym];const s=STOCKS[sym]||{price:p.avgCost};
+    const val=p.shares*s.price;const pnl=val-p.shares*p.avgCost;const cls=pnl>=0?'up':'dn';
+    return `<div class="pos-item">
+      <span class="pos-sym">${sym}</span>
+      <div class="pos-info"><div style="font-size:.78rem;font-weight:600">${p.shares} shares</div><div class="pos-shares">Avg $${fmtNum(p.avgCost)}</div></div>
+      <div><div class="pos-value">${fmtCur(val)}</div><div class="pos-pnl ${cls}">${pnl>=0?'+':''}${fmtCur(pnl)}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderOrdersList(){
+  const list=document.getElementById('ordersList');
+  const none=document.getElementById('noOrders');
+  none.style.display=orderHistory.length?'none':'block';
+  list.innerHTML=orderHistory.slice(0,20).map(o=>`
+    <div class="order-item">
+      <div class="order-head">
+        <span class="order-sym">${o.sym}</span>
+        <span class="order-status os-filled">Filled</span>
+      </div>
+      <div class="order-detail">${o.side.toUpperCase()} <span>${o.shares} shares</span> @ <span>$${fmtNum(o.price)}</span> · ${o.time}</div>
+    </div>`).join('');
+}
+renderPositions();renderOrdersList();
+
+// TRADE TABS
+let activeTradeTab='order';
+window.setTradeTab=function(tab,btn){
+  activeTradeTab=tab;
+  document.querySelectorAll('.trade-tab').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  ['order','positions','orders'].forEach(t=>{document.getElementById('trade-'+t).style.display=t===tab?'block':'none';});
+  if(tab==='positions') renderPositions();
+  if(tab==='orders') renderOrdersList();
+};
+
+// LEADERBOARD
+const LB_DATA=[
+  {rank:1,name:'CryptoWolf_88',pnl:48200,trades:284,winRate:68,color:'#ffb347'},
+  {rank:2,name:'QuantQueen',pnl:34500,trades:192,winRate:71,color:'#c0c0c0'},
+  {rank:3,name:'BullRunner22',pnl:28900,trades:156,winRate:64,color:'#cd7f32'},
+  {rank:4,name:'TechTrend',pnl:22400,trades:98,winRate:59,color:'#405570'},
+  {rank:5,name:'DividendKing',pnl:18700,trades:45,winRate:76,color:'#405570'},
+  {rank:6,name:'MomentumMike',pnl:14200,trades:210,winRate:55,color:'#405570'},
+  {rank:7,name:'You 👈',pnl:0,trades:orderHistory.length,winRate:0,isYou:true,color:'#00dc78'},
+  {rank:8,name:'SwingTrader_J',pnl:-2400,trades:88,winRate:48,color:'#405570'},
+  {rank:9,name:'ValueVince',pnl:-5800,trades:32,winRate:43,color:'#405570'},
+  {rank:10,name:'YOLO_Capital',pnl:-18200,trades:421,winRate:31,color:'#405570'},
+];
+
+function renderLeaderboard(){
+  // Update "You" entry
+  const totalVal=cash+Object.keys(positions).reduce((s,sym)=>s+(STOCKS[sym]?positions[sym].shares*STOCKS[sym].price:0),0);
+  const youIdx=LB_DATA.findIndex(x=>x.isYou);
+  if(youIdx>=0){LB_DATA[youIdx].pnl=Math.round(totalVal-100000);LB_DATA[youIdx].trades=orderHistory.length;}
+  LB_DATA.sort((a,b)=>b.pnl-a.pnl);LB_DATA.forEach((x,i)=>x.rank=i+1);
+  document.getElementById('lbTable').innerHTML=`
+    <thead><tr><th>Rank</th><th>Trader</th><th>P&L</th><th>Trades</th><th>Win Rate</th><th>Return</th></tr></thead>
+    <tbody>${LB_DATA.map(r=>`<tr ${r.isYou?'class="you"':''}>
+      <td><div class="rank-m" style="background:${r.color}">${r.rank}</div></td>
+      <td style="font-weight:${r.isYou?700:500}">${r.name}</td>
+      <td><span class="pnl-pill" style="background:${r.pnl>=0?'var(--green-bg2)':'var(--red-bg)'};color:${r.pnl>=0?'var(--green)':'var(--red)'}">${r.pnl>=0?'+':''}${fmtCur(r.pnl)}</span></td>
+      <td>${r.trades}</td>
+      <td style="color:${r.winRate>=60?'var(--green)':r.winRate>=50?'var(--amber)':'var(--red)'}">${r.winRate}%</td>
+      <td style="color:${r.pnl>=0?'var(--green)':'var(--red)'}">${r.pnl>=0?'+':''}${((r.pnl/100000)*100).toFixed(2)}%</td>
+    </tr>`).join('')}
+    </tbody>`;
+}
+
+// NEWS
+const NEWS=[
+  {cat:'bull','nc':'nc-bull',title:'Fed signals potential rate cuts in Q2 2026 — tech stocks surge on the news',sym:['AAPL','MSFT','NVDA'],time:'10 min ago'},
+  {cat:'bull','nc':'nc-bull',title:'NVIDIA announces next-gen AI chip with 2x performance improvement',sym:['NVDA'],time:'22 min ago'},
+  {cat:'bear','nc':'nc-bear',title:'Tesla Q4 delivery numbers miss estimates by 8% — shares drop in premarket',sym:['TSLA'],time:'45 min ago'},
+  {cat:'neutral','nc':'nc-neutral',title:'Apple sets March 15 event date — analysts speculate on AR/VR product launch',sym:['AAPL'],time:'1h ago'},
+  {cat:'bull','nc':'nc-bull',title:'Crypto rally lifts Coinbase shares — Bitcoin tops $72K for first time since ATH',sym:['COIN'],time:'1h 20m ago'},
+  {cat:'bear','nc':'nc-bear',title:'Netflix subscriber growth slows — analysts cut price targets ahead of earnings',sym:['NFLX'],time:'2h ago'},
+  {cat:'neutral','nc':'nc-neutral',title:'Market breadth improves as small-cap stocks outperform large-caps',sym:[],time:'2h 30m ago'},
+  {cat:'bull','nc':'nc-bull',title:'Amazon Web Services announces 40% price reduction for storage services',sym:['AMZN'],time:'3h ago'},
+  {cat:'bull','nc':'nc-bull',title:'JPMorgan beats Q4 estimates — trading revenue surges 28%',sym:['JPM'],time:'3h 45m ago'},
+  {cat:'bear','nc':'nc-bear',title:'AMD loses server market share to NVIDIA amid AI chip shortage — analysts warn',sym:['AMD'],time:'4h ago'},
+];
+
+function renderNews(){
+  document.getElementById('newsFeed').innerHTML=`
+    <div style="font-family:var(--font-mono);font-size:.88rem;color:var(--green);margin-bottom:1.25rem">// MARKET NEWS FEED</div>
+    ${NEWS.map(n=>`<div class="news-item">
+      <span class="news-cat ${n.nc}">${n.cat.toUpperCase()}</span>
+      <div>
+        <div class="news-title">${n.title}</div>
+        <div class="news-meta">${n.time}${n.sym.length?` · Affected: ${n.sym.map(s=>`<span style="color:var(--green)">${s}</span>`).join(', ')}`:''}
+        </div>
+      </div>
+    </div>`).join('')}`;
+}
+
+// PAGE TABS
+window.goTab=function(tab){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelectorAll('.ntab')[['trading','leaderboard','news'].indexOf(tab)]?.classList.add('active');
+  if(tab==='leaderboard') renderLeaderboard();
+  if(tab==='news') renderNews();
+};
+
+// TOAST
+window.toast=function(msg,type='info'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type}-toast show`;
+  setTimeout(()=>t.classList.remove('show'),2800);
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prism — Interactive Data Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">P</div>
+      <div>
+        <div class="logo-name">Prism</div><span class="logo-sub">Analytics Suite</span>
+      </div>
+    </div>
+    <nav class="snav">
+      <div class="sidebar-section-label">Overview</div>
+      <button class="snl active" onclick="goDash('overview')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>Overview
+      </button>
+      <button class="snl" onclick="goDash('realtime')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>Real-Time
+      </button>
+      <div class="sidebar-section-label">Analytics</div>
+      <button class="snl" onclick="goDash('revenue')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>Revenue
+      </button>
+      <button class="snl" onclick="goDash('customers')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>Customers
+      </button>
+      <button class="snl" onclick="goDash('geography')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>Geography
+      </button>
+      <button class="snl" onclick="goDash('products')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+        </svg>Products
+      </button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="user-row">
+        <div class="user-avatar">JD</div>
+        <div>
+          <div class="user-name">Jordan Davis</div>
+          <div class="user-role">Data Analyst</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-breadcrumb">Dashboard · <span id="breadcrumbPage">Overview</span></div>
+    </div>
+    <div class="topbar-right">
+      <div class="date-badge" id="dateBadge"></div>
+      <button class="refresh-btn" onclick="refreshData()">↻ Refresh</button>
+      <div class="notif-btn">🔔</div>
+    </div>
+  </div>
+
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <div class="page active" id="dash-overview">
+      <div class="page-head">
+        <div class="page-title">Dashboard Overview</div>
+        <div class="page-sub">Your key metrics at a glance · Last updated just now</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card c1">
+          <div class="kpi-label">Total Revenue <span class="kpi-icon">💰</span></div>
+          <div class="kpi-val" id="kpi1">$0</div>
+          <div class="kpi-change up">↑ +18.4% vs last month</div><canvas class="kpi-sparkline" id="spark1"></canvas>
+        </div>
+        <div class="kpi-card c2">
+          <div class="kpi-label">Active Users <span class="kpi-icon">👥</span></div>
+          <div class="kpi-val" id="kpi2">0</div>
+          <div class="kpi-change up">↑ +11.2% vs last month</div><canvas class="kpi-sparkline" id="spark2"></canvas>
+        </div>
+        <div class="kpi-card c3">
+          <div class="kpi-label">Conversion Rate <span class="kpi-icon">📈</span></div>
+          <div class="kpi-val" id="kpi3">0%</div>
+          <div class="kpi-change down">↓ -0.8% vs last month</div><canvas class="kpi-sparkline" id="spark3"></canvas>
+        </div>
+        <div class="kpi-card c4">
+          <div class="kpi-label">Avg Order Value <span class="kpi-icon">🛒</span></div>
+          <div class="kpi-val" id="kpi4">$0</div>
+          <div class="kpi-change up">↑ +5.6% vs last month</div><canvas class="kpi-sparkline" id="spark4"></canvas>
+        </div>
+      </div>
+      <div class="chart-row">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Revenue Over Time</div>
+              <div class="card-sub">Monthly revenue trend — 2025</div>
+            </div>
+            <div class="chart-tabs" id="revTabs">
+              <button class="ctab active" onclick="switchRevChart('monthly',this)">Monthly</button>
+              <button class="ctab" onclick="switchRevChart('quarterly',this)">Quarterly</button>
+              <button class="ctab" onclick="switchRevChart('weekly',this)">Weekly</button>
+            </div>
+          </div>
+          <canvas id="revenueChart" height="200"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Traffic Sources</div>
+              <div class="card-sub">Where visitors come from</div>
+            </div>
+          </div>
+          <canvas id="trafficChart" height="200"></canvas>
+        </div>
+      </div>
+      <div class="chart-row">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Recent Transactions</div><span class="chip chip-coral">Live</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table" id="txTable"></table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Team Performance</div>
+              <div class="card-sub">By department</div>
+            </div>
+          </div>
+          <canvas id="teamChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- REALTIME -->
+    <div class="page" id="dash-realtime">
+      <div class="page-head">
+        <div class="page-title"><span class="rt-indicator"></span>Real-Time Monitor</div>
+        <div class="page-sub">Live data — auto-refreshing every 3 seconds</div>
+      </div>
+      <div class="realtime-grid">
+        <div class="rt-card">
+          <div class="rt-label">Active Sessions</div>
+          <div class="rt-num" id="rtSessions" style="color:var(--coral)">0</div>
+          <div style="font-size:.72rem;color:var(--text-muted)">across all platforms</div>
+        </div>
+        <div class="rt-card">
+          <div class="rt-label">Events / Min</div>
+          <div class="rt-num" id="rtEvents" style="color:var(--teal)">0</div>
+          <div style="font-size:.72rem;color:var(--text-muted)">page views & interactions</div>
+        </div>
+        <div class="rt-card">
+          <div class="rt-label">Revenue Today</div>
+          <div class="rt-num" id="rtRevenue" style="color:var(--slate-l)">$0</div>
+          <div style="font-size:.72rem;color:var(--text-muted)">since midnight</div>
+        </div>
+      </div>
+      <div class="chart-row">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Live Traffic</div><span class="chip chip-coral">●&nbsp;Live</span>
+          </div>
+          <canvas id="liveChart" height="220"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Activity Feed</div>
+          </div>
+          <div class="activity-feed" id="activityFeed"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVENUE -->
+    <div class="page" id="dash-revenue">
+      <div class="page-head">
+        <div class="page-title">Revenue Analytics</div>
+        <div class="page-sub">Detailed revenue breakdown and forecasting</div>
+      </div>
+      <div class="chart-row-3">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">This Month</div>
+          </div>
+          <div style="text-align:center;padding:.5rem 0">
+            <div style="font-size:2.5rem;font-weight:800;color:var(--coral);letter-spacing:-.03em">$284,500</div>
+            <div style="font-size:.75rem;color:var(--green);font-weight:700;margin-top:.25rem">↑ 18.4% vs last month
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">This Quarter</div>
+          </div>
+          <div style="text-align:center;padding:.5rem 0">
+            <div style="font-size:2.5rem;font-weight:800;color:var(--teal);letter-spacing:-.03em">$810K</div>
+            <div style="font-size:.75rem;color:var(--green);font-weight:700;margin-top:.25rem">↑ 22.1% vs Q3 2025</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Annual Run Rate</div>
+          </div>
+          <div style="text-align:center;padding:.5rem 0">
+            <div style="font-size:2.5rem;font-weight:800;color:var(--slate-l);letter-spacing:-.03em">$3.1M</div>
+            <div style="font-size:.75rem;color:var(--green);font-weight:700;margin-top:.25rem">On track for $3.5M target
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-row">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Revenue by Channel</div>
+            <div class="card-sub">Direct, Organic, Paid, Referral</div>
+          </div>
+          <canvas id="channelChart" height="240"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Revenue Forecast</div>
+            <div class="card-sub">Next 6 months projection</div>
+          </div>
+          <canvas id="forecastChart" height="240"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="page" id="dash-customers">
+      <div class="page-head">
+        <div class="page-title">Customer Analytics</div>
+        <div class="page-sub">Understand your customer base</div>
+      </div>
+      <div class="filter-bar" id="custFilterBar">
+        <button class="filter-pill active" onclick="setCustFilter('all',this)">All</button>
+        <button class="filter-pill" onclick="setCustFilter('active',this)">Active</button>
+        <button class="filter-pill" onclick="setCustFilter('pending',this)">Pending</button>
+        <button class="filter-pill" onclick="setCustFilter('inactive',this)">Inactive</button>
+        <input type="text" class="search-bar" id="custSearch" placeholder="🔍 Search customers..."
+          onInput="renderCustomers()">
+      </div>
+      <div class="chart-row-3" style="margin-bottom:1.25rem">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Lifetime Value</div>
+          </div><canvas id="ltv" height="160"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Cohort Retention</div>
+          </div><canvas id="cohort" height="160"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Satisfaction (NPS)</div>
+          </div><canvas id="nps" height="160"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Customer Table</div><span id="custCount" class="chip chip-teal">0 customers</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="custTable"></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEOGRAPHY -->
+    <div class="page" id="dash-geography">
+      <div class="page-head">
+        <div class="page-title">Geographic Data</div>
+        <div class="page-sub">Revenue and users by region</div>
+      </div>
+      <div class="geo-grid">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Revenue by Country</div>
+          </div>
+          <div id="countryList"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Users by Region</div>
+          </div>
+          <canvas id="geoChart" height="280"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Device Breakdown</div>
+          </div>
+          <canvas id="deviceChart" height="220"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Browser Usage</div>
+          </div>
+          <canvas id="browserChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="page" id="dash-products">
+      <div class="page-head">
+        <div class="page-title">Product Analytics</div>
+        <div class="page-sub">Sales performance by product</div>
+      </div>
+      <div class="chart-row">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Top Products by Revenue</div><span class="chip chip-amber">This month</span>
+          </div>
+          <canvas id="prodRevChart" height="260"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Category Split</div>
+          </div>
+          <canvas id="catChart" height="260"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Product Performance Table</div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="prodTable"></table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // UTILS
+    const toast = (msg) => { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500) };
+    const fmtCur = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    const chartDefaults = { responsive: true, plugins: { legend: { labels: { color: '#3a5570', font: { family: 'Outfit', size: 11 }, boxWidth: 10, padding: 12 } }, tooltip: { backgroundColor: '#0d1f33', titleColor: '#fff', bodyColor: '#7a98b5', borderColor: 'rgba(30,77,122,.2)', borderWidth: 1, padding: 10 } }, scales: { x: { grid: { color: 'rgba(30,80,130,.07)' }, ticks: { color: '#7a98b5', font: { family: 'Outfit', size: 10 } } }, y: { grid: { color: 'rgba(30,80,130,.07)' }, ticks: { color: '#7a98b5', font: { family: 'Outfit', size: 10 } } } } };
+    const noScaleDefaults = { responsive: true, plugins: { legend: { labels: { color: '#3a5570', font: { family: 'Outfit', size: 11 }, boxWidth: 10, padding: 12 } }, tooltip: { backgroundColor: '#0d1f33', titleColor: '#fff', bodyColor: '#7a98b5', borderColor: 'rgba(30,77,122,.2)', borderWidth: 1, padding: 10 } } };
+
+    // NAV
+    const PAGES = ['overview', 'realtime', 'revenue', 'customers', 'geography', 'products'];
+    const BREADCRUMBS = { overview: 'Overview', realtime: 'Real-Time Monitor', revenue: 'Revenue', customers: 'Customers', geography: 'Geography', products: 'Products' };
+    window.goDash = function (p) {
+      document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.snl').forEach(x => x.classList.remove('active'));
+      document.getElementById('dash-' + p).classList.add('active');
+      document.querySelectorAll('.snl')[PAGES.indexOf(p)]?.classList.add('active');
+      document.getElementById('breadcrumbPage').textContent = BREADCRUMBS[p];
+      const renders = { overview: renderOverview, realtime: startRealtime, revenue: renderRevenue, customers: renderCustomers, geography: renderGeo, products: renderProducts };
+      renders[p]?.();
+    };
+
+    // DATE
+    function updateDate() { document.getElementById('dateBadge').textContent = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+    updateDate(); setInterval(updateDate, 30000);
+
+    // KPI COUNTER ANIMATION
+    function animateCount(el, target, prefix = '', suffix = '', dur = 1200) {
+      let start = 0, startTime = null;
+      function step(ts) { if (!startTime) startTime = ts; const p = Math.min((ts - startTime) / dur, 1); const val = Math.floor(p * target); el.textContent = prefix + val.toLocaleString() + suffix; if (p < 1) requestAnimationFrame(step); }
+      requestAnimationFrame(step);
+    }
+
+    // SPARKLINES
+    let sparkCharts = {};
+    function makeSparkline(id, data, color) {
+      if (sparkCharts[id]) sparkCharts[id].destroy();
+      sparkCharts[id] = new Chart(document.getElementById(id).getContext('2d'), { type: 'line', data: { labels: data.map((_, i) => i), datasets: [{ data, borderColor: color, borderWidth: 2, fill: true, backgroundColor: color + '18', tension: .4, pointRadius: 0 }] }, options: { responsive: true, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } } } });
+    }
+
+    // MAIN CHARTS
+    let revChart, trafficChart, teamChart, channelChart, forecastChart;
+    let liveChart, liveData = [];
+    let custFilter = 'all';
+
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const revMonthly = [82000, 94000, 88000, 110000, 125000, 142000, 138000, 165000, 172000, 195000, 218000, 284500];
+    const revQuarterly = [264000, 377000, 475000, 284500];
+    const revWeekly = [38000, 42000, 39000, 51000, 48000, 62000, 71000];
+
+    function renderOverview() {
+      animateCount(document.getElementById('kpi1'), 284500, '$');
+      animateCount(document.getElementById('kpi2'), 48219, '', '');
+      setTimeout(() => { document.getElementById('kpi3').textContent = '3.8%' }, 800);
+      animateCount(document.getElementById('kpi4'), 142, '$');
+
+      makeSparkline('spark1', revMonthly.slice(-7), '#e85d3a');
+      makeSparkline('spark2', [22000, 25000, 24000, 28000, 31000, 38000, 48219], '#0d8f8a');
+      makeSparkline('spark3', [4.2, 4.0, 4.5, 4.1, 3.9, 3.7, 3.8], '#2a6aaa');
+      makeSparkline('spark4', [118, 122, 129, 135, 128, 138, 142], '#d97706');
+
+      if (revChart) revChart.destroy();
+      revChart = new Chart(document.getElementById('revenueChart').getContext('2d'), { type: 'bar', data: { labels: MONTHS, datasets: [{ label: 'Revenue', data: revMonthly, backgroundColor: 'rgba(232,93,58,.7)', borderRadius: 6, hoverBackgroundColor: '#e85d3a' }, { label: 'Target', data: revMonthly.map(v => v * 1.1), type: 'line', borderColor: '#0d8f8a', borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, fill: false }] }, options: { ...chartDefaults } });
+
+      if (trafficChart) trafficChart.destroy();
+      trafficChart = new Chart(document.getElementById('trafficChart').getContext('2d'), { type: 'doughnut', data: { labels: ['Organic', 'Direct', 'Paid', 'Referral', 'Social'], datasets: [{ data: [38, 24, 20, 12, 6], backgroundColor: ['#e85d3a', '#0d8f8a', '#1e4d7a', '#d97706', '#16a34a'], borderWidth: 0, hoverOffset: 6 }] }, options: { ...noScaleDefaults, cutout: '68%' } });
+
+      if (teamChart) teamChart.destroy();
+      teamChart = new Chart(document.getElementById('teamChart').getContext('2d'), { type: 'bar', data: { labels: ['Sales', 'Marketing', 'Product', 'Support', 'Engineering'], datasets: [{ label: 'Target', data: [95, 80, 70, 85, 90], backgroundColor: 'rgba(30,77,122,.15)', borderRadius: 4 }, { label: 'Actual', data: [102, 88, 65, 91, 87], backgroundColor: 'rgba(232,93,58,.75)', borderRadius: 4 }] }, options: { ...chartDefaults, indexAxis: 'y' } });
+
+      renderTxTable();
+    }
+
+    function renderTxTable() {
+      const txs = [
+        { id: 'TXN-8841', customer: 'Emma Wilson', amount: 285.00, status: 'active', country: '🇺🇸', date: '2 min ago' },
+        { id: 'TXN-8840', customer: 'James Chen', amount: 1420.50, status: 'active', country: '🇬🇧', date: '5 min ago' },
+        { id: 'TXN-8839', customer: 'Sofia Park', amount: 98.00, status: 'pending', country: '🇩🇪', date: '12 min ago' },
+        { id: 'TXN-8838', customer: 'Marco Rossi', amount: 564.00, status: 'active', country: '🇮🇹', date: '18 min ago' },
+        { id: 'TXN-8837', customer: 'Amara Diallo', amount: 215.75, status: 'inactive', country: '🇫🇷', date: '25 min ago' },
+        { id: 'TXN-8836', customer: 'Lena Mueller', amount: 890.00, status: 'active', country: '🇦🇺', date: '31 min ago' },
+      ];
+      document.getElementById('txTable').innerHTML = `<thead><tr><th>Transaction ID</th><th>Customer</th><th>Country</th><th>Amount</th><th>Status</th><th>Time</th></tr></thead><tbody>${txs.map(t => `<tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text-muted)">${t.id}</td><td>${t.customer}</td><td>${t.country}</td><td style="font-weight:700">${fmtCur(t.amount)}</td><td><span class="status-badge status-${t.status}">${t.status}</span></td><td style="color:var(--text-muted);font-size:.75rem">${t.date}</td></tr>`).join('')}</tbody>`;
+    }
+
+    // REALTIME
+    let rtInterval = null;
+    let sessions = 1840, events = 284, revenue = 18420;
+    const ACT_TEMPLATES = [
+      (u) => `<strong>${u}</strong> completed a purchase — <strong>${fmtCur(Math.floor(Math.random() * 400 + 50))}</strong>`,
+      (u) => `<strong>${u}</strong> signed up for a free trial`,
+      (u) => `<strong>${u}</strong> upgraded to Pro plan`,
+      (u) => `<strong>${u}</strong> viewed the pricing page`,
+      (u) => `<strong>${u}</strong> submitted a support ticket`,
+      (u) => `<strong>${u}</strong> shared a referral link`,
+    ];
+    const NAMES = ['Alex K.', 'Sam R.', 'Jamie L.', 'Taylor M.', 'Morgan P.', 'Casey T.', 'Jordan B.', 'Riley S.'];
+    const DOT_COLORS = ['#e85d3a', '#0d8f8a', '#1e4d7a', '#d97706', '#16a34a'];
+
+    function startRealtime() {
+      if (rtInterval) clearInterval(rtInterval);
+      liveData = Array(20).fill(0).map(() => Math.floor(Math.random() * 2000 + 1000));
+      if (liveChart) liveChart.destroy();
+      liveChart = new Chart(document.getElementById('liveChart').getContext('2d'), { type: 'line', data: { labels: liveData.map((_, i) => i), datasets: [{ label: 'Sessions', data: liveData, borderColor: '#e85d3a', backgroundColor: 'rgba(232,93,58,.08)', borderWidth: 2, fill: true, tension: .4, pointRadius: 0 }] }, options: { ...chartDefaults, animation: false } });
+      renderRealtimeNums();
+      populateFeed();
+      rtInterval = setInterval(() => {
+        sessions += Math.floor(Math.random() * 80 - 30); events += Math.floor(Math.random() * 40 - 10); revenue += Math.floor(Math.random() * 500 + 50);
+        sessions = Math.max(800, sessions); events = Math.max(50, events);
+        renderRealtimeNums();
+        liveData.push(sessions); liveData.shift();
+        liveChart.data.datasets[0].data = [...liveData]; liveChart.update('none');
+        if (Math.random() > .6) addFeedItem();
+      }, 3000);
+    }
+
+    function renderRealtimeNums() {
+      document.getElementById('rtSessions').textContent = sessions.toLocaleString();
+      document.getElementById('rtEvents').textContent = events.toLocaleString();
+      document.getElementById('rtRevenue').textContent = fmtCur(revenue);
+    }
+
+    function populateFeed() {
+      const feed = document.getElementById('activityFeed'); feed.innerHTML = '';
+      for (let i = 0; i < 8; i++) addFeedItem(true);
+    }
+
+    function addFeedItem(init = false) {
+      const feed = document.getElementById('activityFeed');
+      const user = NAMES[Math.floor(Math.random() * NAMES.length)];
+      const tmpl = ACT_TEMPLATES[Math.floor(Math.random() * ACT_TEMPLATES.length)];
+      const color = DOT_COLORS[Math.floor(Math.random() * DOT_COLORS.length)];
+      const times = ['just now', '1 min ago', '2 min ago', '3 min ago'];
+      const el = document.createElement('div'); el.className = 'act-item';
+      el.innerHTML = `<div class="act-dot" style="background:${color}"></div><div class="act-text">${tmpl(user)}</div><div class="act-time">${init ? times[Math.floor(Math.random() * times.length)] : 'just now'}</div>`;
+      if (init) feed.appendChild(el);
+      else { feed.insertBefore(el, feed.firstChild); if (feed.children.length > 20) feed.removeChild(feed.lastChild); }
+    }
+
+    // REVENUE
+    function renderRevenue() {
+      if (channelChart) channelChart.destroy();
+      channelChart = new Chart(document.getElementById('channelChart').getContext('2d'), { type: 'bar', data: { labels: MONTHS, datasets: [{ label: 'Direct', data: [30000, 34000, 32000, 40000, 46000, 52000, 50000, 60000, 63000, 72000, 80000, 104000], backgroundColor: 'rgba(232,93,58,.8)', borderRadius: 4 }, { label: 'Organic', data: [22000, 25000, 24000, 30000, 34000, 38000, 37000, 44000, 46000, 53000, 58000, 76000], backgroundColor: 'rgba(13,143,138,.7)', borderRadius: 4 }, { label: 'Paid', data: [18000, 20000, 19000, 24000, 27000, 30000, 29000, 35000, 37000, 43000, 48000, 62000], backgroundColor: 'rgba(30,77,122,.6)', borderRadius: 4 }, { label: 'Referral', data: [12000, 15000, 13000, 16000, 18000, 22000, 22000, 26000, 26000, 27000, 32000, 42000], backgroundColor: 'rgba(217,119,6,.7)', borderRadius: 4 }] }, options: { ...chartDefaults, scales: { ...chartDefaults.scales, x: { ...chartDefaults.scales.x, stacked: true }, y: { ...chartDefaults.scales.y, stacked: true } } } });
+      if (forecastChart) forecastChart.destroy();
+      const actual = [...revMonthly]; const forecast = actual.slice(-3).concat([310000, 342000, 380000]);
+      forecastChart = new Chart(document.getElementById('forecastChart').getContext('2d'), { type: 'line', data: { labels: [...MONTHS, ...['Jan', 'Feb', 'Mar'].map(m => m + ' 2026')], datasets: [{ label: 'Actual', data: [...actual, ...[null, null, null]], borderColor: '#e85d3a', borderWidth: 2, tension: .4, pointRadius: 3, pointBackgroundColor: '#e85d3a' }, { label: 'Forecast', data: [...actual.slice(0, -3), ...forecast], borderColor: '#0d8f8a', borderDash: [6, 4], borderWidth: 2, tension: .4, pointRadius: 3, pointBackgroundColor: '#0d8f8a' }] }, options: { ...chartDefaults } });
+    }
+
+    // CUSTOMERS
+    const CUSTOMERS = [
+      { name: 'Emma Wilson', email: 'emma@co.com', plan: 'Enterprise', ltv: 12400, orders: 28, status: 'active', country: '🇺🇸' },
+      { name: 'James Chen', email: 'james@io.com', plan: 'Pro', ltv: 8200, orders: 19, status: 'active', country: '🇬🇧' },
+      { name: 'Sofia Park', email: 'sofia@app.com', plan: 'Starter', ltv: 1400, orders: 5, status: 'pending', country: '🇩🇪' },
+      { name: 'Marco Rossi', email: 'marco@srl.it', plan: 'Pro', ltv: 6800, orders: 15, status: 'active', country: '🇮🇹' },
+      { name: 'Amara Diallo', email: 'amara@co.fr', plan: 'Starter', ltv: 980, orders: 3, status: 'inactive', country: '🇫🇷' },
+      { name: 'Lena Mueller', email: 'lena@gmbh.de', plan: 'Enterprise', ltv: 18200, orders: 41, status: 'active', country: '🇩🇪' },
+      { name: 'Kenji Tanaka', email: 'kenji@jp.com', plan: 'Pro', ltv: 5200, orders: 12, status: 'active', country: '🇯🇵' },
+      { name: 'Ana Ferreira', email: 'ana@br.com', plan: 'Starter', ltv: 2100, orders: 7, status: 'pending', country: '🇧🇷' },
+    ];
+    const PLAN_COLORS = { 'Enterprise': '#e85d3a', 'Pro': '#0d8f8a', 'Starter': '#1e4d7a' };
+
+    window.setCustFilter = function (f, el) { custFilter = f; document.querySelectorAll('#custFilterBar .filter-pill').forEach(x => x.classList.remove('active')); el.classList.add('active'); renderCustomers(); };
+
+    window.renderCustomers = function () {
+      const q = (document.getElementById('custSearch')?.value || '').toLowerCase();
+      let list = CUSTOMERS.filter(c => {
+        const sf = custFilter === 'all' || c.status === custFilter;
+        const sq = !q || c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.plan.toLowerCase().includes(q);
+        return sf && sq;
+      });
+      document.getElementById('custCount').textContent = `${list.length} customers`;
+      document.getElementById('custTable').innerHTML = `<thead><tr><th>Customer</th><th>Plan</th><th>Country</th><th>LTV</th><th>Orders</th><th>Status</th></tr></thead><tbody>${list.map(c => `<tr><td><div class="tbl-name"><div class="tbl-avatar" style="background:${PLAN_COLORS[c.plan]}">${c.name[0]}</div><div><div style="font-weight:600;font-size:.82rem">${c.name}</div><div style="font-size:.7rem;color:var(--text-muted)">${c.email}</div></div></div></td><td><span class="chip ${c.plan === 'Enterprise' ? 'chip-coral' : c.plan === 'Pro' ? 'chip-teal' : 'chip-amber'}">${c.plan}</span></td><td>${c.country}</td><td style="font-weight:700">${fmtCur(c.ltv)}</td><td>${c.orders}</td><td><span class="status-badge status-${c.status}">${c.status}</span></td></tr>`).join('')}</tbody>`;
+      // Mini charts
+      [['ltv', { type: 'bar', data: { labels: list.map(c => c.name.split(' ')[0]), datasets: [{ data: list.map(c => c.ltv), backgroundColor: 'rgba(232,93,58,.7)', borderRadius: 4 }] }, options: { ...chartDefaults, plugins: { legend: { display: false } } } }],
+      ['cohort', { type: 'line', data: { labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6'], datasets: [{ label: '2024 Cohort', data: [100, 82, 71, 65, 60, 58], borderColor: '#e85d3a', tension: .4, fill: false, pointRadius: 3, borderWidth: 2 }, { label: '2025 Cohort', data: [100, 86, 76, 70, 66, null], borderColor: '#0d8f8a', tension: .4, fill: false, pointRadius: 3, borderWidth: 2, borderDash: [4, 3] }] }, options: { ...chartDefaults } }],
+      ['nps', { type: 'doughnut', data: { labels: ['Promoters', 'Passives', 'Detractors'], datasets: [{ data: [68, 22, 10], backgroundColor: ['#16a34a', '#d97706', '#dc2626'], borderWidth: 0, hoverOffset: 4 }] }, options: { ...noScaleDefaults, cutout: '70%' } }]
+      ].forEach(([id, cfg]) => { const c = Chart.getChart(document.getElementById(id)); if (c) c.destroy(); new Chart(document.getElementById(id).getContext('2d'), cfg); });
+    };
+
+    // GEOGRAPHY
+    function renderGeo() {
+      const countries = [{ flag: '🇺🇸', name: 'United States', rev: 124000, pct: 44 }, { flag: '🇬🇧', name: 'United Kingdom', rev: 48200, pct: 17 }, { flag: '🇩🇪', name: 'Germany', rev: 34500, pct: 12 }, { flag: '🇯🇵', name: 'Japan', rev: 22800, pct: 8 }, { flag: '🇫🇷', name: 'France', rev: 18600, pct: 7 }, { flag: '🇦🇺', name: 'Australia', rev: 14200, pct: 5 }, { flag: '🌍', name: 'Other', rev: 21200, pct: 7 }];
+      document.getElementById('countryList').innerHTML = countries.map(c => `<div class="region-item"><span class="region-flag">${c.flag}</span><div class="region-info"><div class="region-name">${c.name}</div><div class="region-val">${fmtCur(c.rev)}</div></div><div class="region-bar-wrap"><div class="region-bar"><div class="region-fill" style="width:${c.pct}%"></div></div><div class="region-pct">${c.pct}%</div></div></div>`).join('');
+      [['geoChart', { type: 'bar', data: { labels: countries.map(c => c.name), datasets: [{ label: 'Revenue', data: countries.map(c => c.rev), backgroundColor: 'rgba(232,93,58,.75)', borderRadius: 6 }] }, options: { ...chartDefaults, indexAxis: 'y', plugins: { legend: { display: false } } } }],
+      ['deviceChart', { type: 'doughnut', data: { labels: ['Desktop', 'Mobile', 'Tablet'], datasets: [{ data: [52, 38, 10], backgroundColor: ['#1e4d7a', '#e85d3a', '#0d8f8a'], borderWidth: 0, hoverOffset: 4 }] }, options: { ...noScaleDefaults, cutout: '65%' } }],
+      ['browserChart', { type: 'doughnut', data: { labels: ['Chrome', 'Safari', 'Firefox', 'Edge', 'Other'], datasets: [{ data: [58, 22, 10, 7, 3], backgroundColor: ['#e85d3a', '#0d8f8a', '#d97706', '#1e4d7a', '#7a98b5'], borderWidth: 0, hoverOffset: 4 }] }, options: { ...noScaleDefaults, cutout: '65%' } }]
+      ].forEach(([id, cfg]) => { const c = Chart.getChart(document.getElementById(id)); if (c) c.destroy(); new Chart(document.getElementById(id).getContext('2d'), cfg); });
+    }
+
+    // PRODUCTS
+    function renderProducts() {
+      const PRODS = [{ name: 'Pro Annual Plan', cat: 'Subscription', rev: 142000, units: 480, trend: 92 }, { name: 'Enterprise License', cat: 'Subscription', rev: 98000, units: 54, trend: 88 }, { name: 'Starter Monthly', cat: 'Subscription', rev: 48000, units: 1680, trend: 75 }, { name: 'API Add-on Pack', cat: 'Add-on', rev: 28000, units: 320, trend: 62 }, { name: 'White-label Package', cat: 'Service', rev: 22000, units: 12, trend: 55 }, { name: 'Training Workshop', cat: 'Service', rev: 15000, units: 30, trend: 45 }];
+      const c1 = Chart.getChart(document.getElementById('prodRevChart')); if (c1) c1.destroy();
+      new Chart(document.getElementById('prodRevChart').getContext('2d'), { type: 'bar', data: { labels: PRODS.map(p => p.name), datasets: [{ label: 'Revenue', data: PRODS.map(p => p.rev), backgroundColor: ['#e85d3a', '#f07555', '#0d8f8a', '#1e4d7a', '#d97706', '#7a98b5'].map(c => c + 'cc'), borderRadius: 6 }] }, options: { ...chartDefaults, plugins: { legend: { display: false } }, indexAxis: 'y' } });
+      const c2 = Chart.getChart(document.getElementById('catChart')); if (c2) c2.destroy();
+      new Chart(document.getElementById('catChart').getContext('2d'), { type: 'doughnut', data: { labels: ['Subscription', 'Add-on', 'Service'], datasets: [{ data: [288000, 28000, 37000], backgroundColor: ['#e85d3a', '#0d8f8a', '#1e4d7a'], borderWidth: 0, hoverOffset: 6 }] }, options: { ...noScaleDefaults, cutout: '68%' } });
+      document.getElementById('prodTable').innerHTML = `<thead><tr><th>Product</th><th>Category</th><th>Revenue</th><th>Units Sold</th><th>Performance</th></tr></thead><tbody>${PRODS.map(p => `<tr><td style="font-weight:600">${p.name}</td><td><span class="chip ${p.cat === 'Subscription' ? 'chip-coral' : p.cat === 'Add-on' ? 'chip-teal' : 'chip-amber'}">${p.cat}</span></td><td style="font-weight:700">${fmtCur(p.rev)}</td><td>${p.units.toLocaleString()}</td><td><div class="trend-bar"><div class="trend-fill" style="width:${p.trend}%;background:var(--coral)"></div></div></td></tr>`).join('')}</tbody>`;
+    }
+
+    // SWITCH CHART
+    window.switchRevChart = function (period, btn) {
+      document.querySelectorAll('#revTabs .ctab').forEach(x => x.classList.remove('active')); btn.classList.add('active');
+      const dataMap = { monthly: { labels: MONTHS, data: revMonthly }, quarterly: { labels: ['Q1', 'Q2', 'Q3', 'Q4'], data: revQuarterly }, weekly: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], data: revWeekly } };
+      const d = dataMap[period]; revChart.data.labels = d.labels; revChart.data.datasets[0].data = d.data; revChart.data.datasets[1].data = d.data.map(v => v * 1.1); revChart.update();
+    };
+
+    window.refreshData = function () { toast('Data refreshed ↻'); renderOverview(); };
+
+    // INIT
+    renderOverview();
+  </script>
+</body>
+
+</html>
