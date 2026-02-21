@@ -91,9 +91,9 @@ const Footer = () => {
                   placeholder="Enter your email"
                   aria-label="Enter your email"
                 />
-                <button className="btn btn-outline-light" type="button" onClick={handleClick} style={{background:'none', border:'none', cursor:'pointer'}}>
+                {/* <button className="btn btn-outline-light" type="button" onClick={handleClick} style={{background:'none', border:'none', cursor:'pointer'}}>
                   Subscribe
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

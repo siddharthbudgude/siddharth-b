@@ -23,7 +23,7 @@ function Calculator() {
 
   const calculateResult = () => {
     try {
-      const result = Function('"use strict"; return (' + expression + ')')();
+      // const result = Function('"use strict"; return (' + expression + ')')();
       setIsResultDisplayed(true); 
     } catch (error) {
       setResult("Error");
