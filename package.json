@@ -2,7 +2,7 @@
   "name": "codestar",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/",
+  "homepage": "https://siddharthbudgude.github.io/siddharth-b",
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
@@ -20,14 +20,14 @@
     "typewriter-effect": "^2.21.0",
     "web-vitals": "^2.1.4"
   },
-"scripts": {
-  "start": "react-scripts start",
-  "build": "cross-env CI=false react-scripts build",
-  "test": "react-scripts test",
-  "eject": "react-scripts eject",
-  "predeploy": "cross-env CI=false react-scripts build",
-  "deploy": "gh-pages -d build"
-},
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "cross-env CI=false react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "cross-env CI=false react-scripts build",
+    "deploy": "gh-pages -d build"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
