@@ -31,10 +31,10 @@ class ErrorBoundary extends React.Component {
         <main className="flex-grow-1 d-flex align-items-center justify-content-center" style={{ marginTop: '80px', minHeight: '60vh' }}>
           <div className="text-center p-5">
             <h2>Something went wrong.</h2>
-            <p>Please refresh the page or try a different route.</p>
-            <details style={{ textAlign: 'left', fontSize: '0.9rem' }}>
+            <p>Please refresh the page or try a different route. Check console for details.</p>
+            <details style={{ textAlign: 'left', fontSize: '0.9rem', marginTop: '1rem' }}>
               <summary>Error details (click to expand)</summary>
-              <pre>{this.state.error?.message}</pre>
+              <pre>{this.state.error && this.state.error.toString()}</pre>
             </details>
           </div>
         </main>
@@ -51,7 +51,6 @@ export default function MyApp() {
       <Navbar />
       <ErrorBoundary>
         <main className="flex-grow-1" style={{ marginTop: '80px' }}>
-        <ErrorBoundary>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -60,7 +59,6 @@ export default function MyApp() {
             <Route path="/resume" element={<Resume />} />
             <Route path="/portfolio" element={<Portfolio />} />
           </Routes>
-        </ErrorBoundary>
         </main>
       </ErrorBoundary>
       <Footer />
