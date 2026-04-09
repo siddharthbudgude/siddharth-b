@@ -269,7 +269,8 @@ const HeroSection = () => {
     const resize = () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; };
     resize();
     window.addEventListener('resize', resize);
-    const COUNT = Math.min(50, Math.floor((window.innerWidth * window.innerHeight) / 16000));
+    const isMobile = window.innerWidth < 768;
+    const COUNT = isMobile ? 20 : Math.min(50, Math.floor((window.innerWidth * window.innerHeight) / 16000));
     const pts = Array.from({ length: COUNT }, () => ({
       x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
       r: Math.random() * 1.6 + 0.6,
@@ -399,7 +400,7 @@ export default function PortfolioPage() {
           {projectsData.map(p => (
             <div key={p.id} className="pf-proj-card">
               <div className="pf-proj-thumb">
-                <iframe
+                <iframe loading="lazy"
                   src={p.preview}
                   title={p.title}
                   scrolling="no"
