@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.ef591c62.css",
-    "main.js": "/static/js/main.fe621f4a.js",
-    "static/js/453.580549ae.chunk.js": "/static/js/453.580549ae.chunk.js",
-    "static/media/Monigue.woff": "/static/media/Monigue.22c873016e1ef50837ec.woff",
-    "index.html": "/index.html",
-    "main.ef591c62.css.map": "/static/css/main.ef591c62.css.map",
-    "main.fe621f4a.js.map": "/static/js/main.fe621f4a.js.map",
-    "453.580549ae.chunk.js.map": "/static/js/453.580549ae.chunk.js.map"
+    "main.css": "/siddharth-b/static/css/main.544d81c9.css",
+    "main.js": "/siddharth-b/static/js/main.d16a4052.js",
+    "static/js/453.580549ae.chunk.js": "/siddharth-b/static/js/453.580549ae.chunk.js",
+    "static/media/Monigue.woff": "/siddharth-b/static/media/Monigue.22c873016e1ef50837ec.woff",
+    "index.html": "/siddharth-b/index.html",
+    "main.544d81c9.css.map": "/siddharth-b/static/css/main.544d81c9.css.map",
+    "main.d16a4052.js.map": "/siddharth-b/static/js/main.d16a4052.js.map",
+    "453.580549ae.chunk.js.map": "/siddharth-b/static/js/453.580549ae.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ef591c62.css",
-    "static/js/main.fe621f4a.js"
+    "static/css/main.544d81c9.css",
+    "static/js/main.d16a4052.js"
   ]
 }
