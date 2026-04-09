@@ -179,8 +179,8 @@ export default function Portfolio() {
             </p>
 
             <div className="button-container">
-              <button className="btn btn-primary">View Projects</button>
-              <button className="btn btn-secondary">Get in Touch</button>
+              <button className="btn">View Projects</button>
+              <button className="btn btn-outline">Get in Touch</button>
             </div>
           </div>
         </div>

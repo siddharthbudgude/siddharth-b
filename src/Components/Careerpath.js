@@ -82,8 +82,8 @@ function Aboutme() {
                             <p className="fs-6 ">My educational experiences have equipped me with critical thinking abilities, analytical skills, and technical knowledge that are essential for navigating today’s dynamic and competitive environment. From foundational learning to specialized training, each academic achievement has fueled my passion for innovation and excellence.
                             </p>
                             <p className="fs-6 ">I am continuously evolving and embracing new challenges through my master's program, which offers opportunities to stay updated with the latest advancements in technology and industry practices. This journey is not just about earning degrees but about gaining insights, creating impactful solutions, and contributing meaningfully to every project I undertake.</p>
-                            <button className="btn me-4 mt-3 mt-md-3 px-4 py-3 fw-bold">View Work</button>
-                            <button className="btn me-4 mt-3 mt-md-3 px-4 py-3 fw-bold" onClick={handleDownload}>Download CV</button>
+                            <button className="btn me-3 mt-3">View Work</button>
+                            <button className="btn mt-3" onClick={handleDownload}>Download CV</button>
                         </div>
                     </div>
 

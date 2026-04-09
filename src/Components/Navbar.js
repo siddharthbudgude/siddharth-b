@@ -48,8 +48,8 @@ const Navbar = () => {
             </li>
           </ul>
 
-          <div className="d-flex gap-2">
-            <Link to="/contact" className="btn nav-link" onClick={() => setIsNavCollapsed(true)}>Connect With Me</Link>
+          <div className="d-flex gap-2 align-items-center">
+            <Link to="/contact" className="btn btn-outline" onClick={() => setIsNavCollapsed(true)}>Connect With Me</Link>
             <button className="btn" type="button">Hire Me</button>
           </div>
         </div>

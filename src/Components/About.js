@@ -32,10 +32,10 @@ function Aboutme() {
                             <div className="">
                                 <h1 className="text-dark rounded fw-bold mb-3">Siddharth D. Budgude</h1>
                                 <p className="text-secondary">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. .Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. .Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. .</p>
-                                <div className="d-flex gap-2">
-                                    <button className="btn mt-3 mt-md-3 px-4 py-3 fw-bold">Checkout My Portfolio</button>
-                                    <button className="btn mt-3 mt-md-3 px-4 py-3 fw-bold">Contact ME</button>
-                                    <button className="btn mt-3 mt-md-3 px-4 py-3 fw-bold">Hire Me</button>
+                                <div className="d-flex gap-2 flex-wrap">
+                                    <button className="btn mt-3">Checkout My Portfolio</button>
+                                    <button className="btn mt-3">Contact Me</button>
+                                    <button className="btn mt-3">Hire Me</button>
                                 </div>
                             </div>
                         </div>
