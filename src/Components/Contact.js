@@ -52,14 +52,14 @@ const Contact = () => {
                 {/* Left Side - Contact Info & Social Media */}
                 <div className="col-md-5 contact-info p-4">
                     <h3 className="p-3 fw-bold mb-3 bg-white rounded w-100">Connect With Me</h3>
-                    <p className="p-3 mb-3 bg-white rounded w-100"><strong><i class="fa-solid fa-envelope"></i></strong>siddharthbudgude5@gmail.com</p>
-                    <p className="p-3 mb-3 bg-white rounded w-100"><strong><i class="fa-solid fa-phone"></i></strong> +91 7507151652</p>
+                    <p className="p-3 mb-3 bg-white rounded w-100"><strong><i className="fa-solid fa-envelope"></i></strong>siddharthbudgude5@gmail.com</p>
+                    <p className="p-3 mb-3 bg-white rounded w-100"><strong><i className="fa-solid fa-phone"></i></strong> +91 7507151652</p>
                     <div className="social-icons">
                         <a href="#" target='_blank' className="btn btn-outline-light btn-floating m-1">
                             <i className="fab fa-linkedin-in"></i>
                         </a>
                         <a href="#" target='_blank' className="btn btn-outline-light btn-floating m-1">
-                            <i class="fa-brands fa-github"></i>
+                            <i className="fa-brands fa-github"></i>
                         </a>
                         <a href="#" target='_blank' className="btn btn-outline-light btn-floating m-1">
                             <i className="fab fa-facebook-f"></i>

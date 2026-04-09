@@ -17,17 +17,17 @@ const projectsData = [
 ];
 const skillsData = [
   { id: 1, image: `${process.env.PUBLIC_URL}/images/html-logo.png`, name: 'HTML5', category: 'front-end' },
-  { id: 2, image: `${process.env.PUBLIC_URL}/images/css-logo.png`, name: 'CSS3', category: 'front-end' },
-  { id: 3, image: `${process.env.PUBLIC_URL}/images/javascript-logo.png`, name: 'JavaScript (ES6+)', category: 'front-end' },
-  { id: 4, image: `${process.env.PUBLIC_URL}/images/react-logo.png`, name: 'React.js', category: 'front-end' },
+  { id: 2, image: `${process.env.PUBLIC_URL}/images/CSS-Logo.png`, name: 'CSS3', category: 'front-end' },
+  { id: 3, image: `${process.env.PUBLIC_URL}/images/JavaScript-Logo.png`, name: 'JavaScript (ES6+)', category: 'front-end' },
+  { id: 4, image: `${process.env.PUBLIC_URL}/images/React-logo.png`, name: 'React.js', category: 'front-end' },
   { id: 5, image: `${process.env.PUBLIC_URL}/images/jquery-logo.png`, name: 'Jquery', category: 'front-end' },
   { id: 6, image: `${process.env.PUBLIC_URL}/images/bootstrap-5-logo.png`, name: 'Bootstrap', category: 'front-end' },
-  { id: 7, image: `${process.env.PUBLIC_URL}/images/tailwind-css-logo.png`, name: 'Tailwind CSSS', category: 'front-end' },
-  { id: 8, image: `${process.env.PUBLIC_URL}/images/figma-logo.png`, name: 'Figma', category: 'designing' },
+  { id: 7, image: `${process.env.PUBLIC_URL}/images/Tailwind-css-logo.png`, name: 'Tailwind CSS', category: 'front-end' },
+  { id: 8, image: `${process.env.PUBLIC_URL}/images/Figma-Logo.png`, name: 'Figma', category: 'designing' },
   { id: 9, image: `${process.env.PUBLIC_URL}/images/canva-logo.png`, name: 'Canva', category: 'designing' },
-  { id: 10, image: `${process.env.PUBLIC_URL}/images/wordpress-logo.png`, name: 'WordPress', category: 'cms' },
+  { id: 10, image: `${process.env.PUBLIC_URL}/images/WordPress-logo.png`, name: 'WordPress', category: 'cms' },
   { id: 11, image: `${process.env.PUBLIC_URL}/images/magento-logo.png`, name: 'Magento2', category: 'cms' },
-  { id: 12, image: `${process.env.PUBLIC_URL}/images/github-logo.png`, name: 'Git Hub', category: 'version-control' },
+  { id: 12, image: `${process.env.PUBLIC_URL}/images/GitHub-logo.png`, name: 'Git Hub', category: 'version-control' },
 ];
 
 const Skills = () => {
@@ -82,7 +82,7 @@ const HeroSection = () => {
       <div className="hero-buttons">
         <button className="btn btn-dark me-3 mb-4">Need a Designer</button>
         <button className="btn btn-outline-dark me-3 mb-4">Need a Developer</button>
-        <a href='/Resume' className="resume-home btn">Chekout My Resume</a>
+        <a href='/resume' className="resume-home btn">Chekout My Resume</a>
       </div>
     </section>
   );

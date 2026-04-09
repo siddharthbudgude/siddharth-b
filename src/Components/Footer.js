@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -22,7 +23,7 @@ const Footer = () => {
                 <i className="fab fa-facebook-f"></i>
               </a>
               <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-floating m-1">
-                <i class="fa-brands fa-github"></i>
+                <i className="fa-brands fa-github"></i>
               </a>
               <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-floating m-1">
                 <i className="fab fa-instagram"></i>
@@ -33,31 +34,20 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Products Section */}
-          <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-            <h6 className="text-uppercase fw-bold mb-4">Game</h6>
-            <p>
-              <a href="/calculator" className="text-white text-decoration-none">Calculator</a>
-            </p>
-            <p>
-              <a href="/ticktacgame" className="text-white text-decoration-none">Ticktacgame</a>
-            </p>
-          </div>
-
           {/* Useful Links Section */}
           <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
             <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
             <p>
-              <a href="/careerpath" className="text-white text-decoration-none">Education</a>
+            <Link to="/careerpath" className="text-white text-decoration-none">Education</Link>
             </p>
             <p>
-              <a href="/portfolio" className="text-white text-decoration-none">Portfolio</a>
+              <Link to="/portfolio" className="text-white text-decoration-none">Portfolio</Link>
             </p>
             <p>
-              <a href="/Resume" className="text-white text-decoration-none">Resume</a>
+              <Link to="/resume" className="text-white text-decoration-none">Resume</Link>
             </p>
             <p>
-              <a href="/contact" className="text-white text-decoration-none">Contact Us</a>
+              <Link to="/contact" className="text-white text-decoration-none">Contact Us</Link>
             </p>
           </div>
 

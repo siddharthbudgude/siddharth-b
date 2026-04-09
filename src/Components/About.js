@@ -21,14 +21,14 @@ function Aboutme() {
                         <span className="w-100 line-decor" />
                     </div>
                     <div className="row">
-                        <div className="col-3">
+                        <div className="about-profile-col col-12 col-md-3">
                             <div className="">
                                 <figure className="">
                                     <img src={`${process.env.PUBLIC_URL}/images/sidd.png`} alt="developer" className="img-fluid figure-img" />
                                 </figure>
                             </div>
                         </div>
-                        <div className="col-9">
+                        <div className="about-bio-col col-12 col-md-9">
                             <div className="">
                                 <h1 className="text-dark rounded fw-bold mb-3">Siddharth D. Budgude</h1>
                                 <p className="text-secondary">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. .Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. .Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. .</p>
@@ -128,7 +128,7 @@ function Skills() {
                     </figure>
                     <figure className="  w-50 w-md-25 p-2 h-100">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src={`${process.env.PUBLIC_URL}/images/javaScript-Logo.png`} alt="skill-one" className="" />
+                            <img src={`${process.env.PUBLIC_URL}/images/JavaScript-Logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">JAVASCRIPT</figcaption>
                         </div>
                     </figure>
@@ -158,7 +158,7 @@ function Skills() {
                     </figure>
                     <figure className="  w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                            <img src={`${process.env.PUBLIC_URL}/images/Wordpress-logo.png`} alt="skill-one" className="" />
+                            <img src={`${process.env.PUBLIC_URL}/images/WordPress-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">WORDPRESS</figcaption>
                         </div>
                     </figure>
@@ -191,7 +191,7 @@ function Workexperience() {
                         </div>
                     </div>
                     <div className="row w-100 p-0 position-relative">
-                        <div className="col-3 position-sticky">
+                        <div className="col-12 col-md-3 work-experience-col position-sticky" style={{top:'80px', height:'fit-content'}}>
                             <section className="work-experience-hero">
                                 <img
                                     src={`${process.env.PUBLIC_URL}/images/aboutme-hero.png`}
@@ -200,7 +200,7 @@ function Workexperience() {
                                 />
                             </section>
                         </div>
-                        <div className="col-9 ">
+                        <div className="col-12 col-md-9 work-experience-content">
                             <div className="w-100 shadow-lg p-3 rounded mb-4">
                                 <h1 className="fs-2 fw-bold mb-2">Ui Developer Intern</h1>
                                 <h3 className="fs-5">Coditron Technologies</h3>

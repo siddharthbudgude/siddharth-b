@@ -127,7 +127,7 @@ function Skills() {
                     </figure>
                     <figure className="  w-50 w-md-25 p-2 h-100">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                        <img src={`${process.env.PUBLIC_URL}/images/javaScript-Logo.png`} alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/JavaScript-Logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">JAVASCRIPT</figcaption>
                         </div>
                     </figure>
@@ -157,7 +157,7 @@ function Skills() {
                     </figure>
                     <figure className="  w-50 w-md-25 p-2">
                         <div className="shadow-lg p-4 rounded d-flex flex-column justify-content-center align-items-center gap-3 h-100">
-                        <img src={`${process.env.PUBLIC_URL}/images/Wordpress-logo.png`} alt="skill-one" className="" />
+                        <img src={`${process.env.PUBLIC_URL}/images/WordPress-logo.png`} alt="skill-one" className="" />
                             <figcaption className="fw-bold">WORDPRESS</figcaption>
                         </div>
                     </figure>
@@ -190,16 +190,16 @@ function Workexperience() {
                         </div>
                     </div>
                     <div className="row w-100 p-0 position-relative">
-                        <div className="col-3 position-sticky">
+                        <div className="col-12 col-md-3 work-experience-col" style={{top:'80px', height:'fit-content'}}>
                             <section className="work-experience-hero">
                                 <img
-                                    src="/images/aboutme-hero.png"
+                                    src={`${process.env.PUBLIC_URL}/images/aboutme-hero.png`}
                                     alt="Education banner"
                                     className="" width='100%' height='450px'
                                 />
                             </section>
                         </div>
-                        <div className="col-9 ">
+                        <div className="col-12 col-md-9 work-experience-content">
                             <div className="w-100 shadow-lg p-3 rounded mb-4">
                                 <h1 className="fs-2 fw-bold mb-2">Ui Developer Intern</h1>
                                 <h3 className="fs-5">Coditron Technologies</h3>

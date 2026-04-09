@@ -187,31 +187,24 @@ button.btn:hover {
 }
 
 /*career page*/
-.career-hero {
-  img {
-    object-fit: cover;
-    object-position: center;
-  }
+.career-hero img {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+}
 
-  h3 {
-    top: 45%;
-    left: 45%;
+@media (max-width: 767px) {
+  .career-hero img {
+    height: 220px !important;
   }
 }
 
 /*about me page*/
-.aboutme-hero {
-  img {
-    object-fit: cover;
-    object-position: center;
-  }
-}
-
-.work-experience-hero {
-  img {
-    object-fit: cover;
-    object-position: center;
-  }
+.aboutme-hero img,
+.work-experience-hero img {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
 }
 
 .aboutme-name {
@@ -220,6 +213,26 @@ button.btn:hover {
 
 .about-work {
   min-width: 260px;
+}
+
+.about-profile-col {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+
+@media (max-width: 767px) {
+  .aboutme-hero img {
+    height: 220px !important;
+  }
+  .about-profile-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  .about-bio-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 
 .line-decor {
@@ -241,44 +254,48 @@ button.btn:hover {
   } */
 }
 
-.skill {
-  figure {
-    &:hover {
-      transform: scale(1.05);
-      cursor: pointer;
+.skill figure:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
 
-      div {
-        border: 1px solid #fd7e14;
-        box-shadow: 0 0rem 2rem rgba(253, 126, 20, 1) !important;
-      }
-    }
+.skill figure:hover div {
+  border: 1px solid #fd7e14;
+  box-shadow: 0 0rem 2rem rgba(253, 126, 20, 1) !important;
+}
 
-    div {
-      min-height: 175px;
-    }
+.skill figure div {
+  min-height: 175px;
+}
 
-    img {
-      width: 90px;
-      height: 90px;
-    }
+.skill figure img {
+  width: 90px;
+  height: 90px;
+}
+
+@media (max-width: 767px) {
+  .skill figure div {
+    min-height: 140px;
+  }
+  .skill figure img {
+    width: 60px;
+    height: 60px;
   }
 }
 
-.skill-tag {
-  p {
-    background-color: #ffe0c7;
-    padding: 3px 6px;
-    color: #fd7e14;
-    border-radius: 4px;
-    border: 1px solid;
-
-    &:hover {
-      background-color: #fff;
-    }
-  }
+.skill-tag p {
+  background-color: #ffe0c7;
+  padding: 3px 6px;
+  color: #fd7e14;
+  border-radius: 4px;
+  border: 1px solid;
 }
 
-/*work experince section*/
+.skill-tag p:hover {
+  background-color: #fff;
+}
+
+/*work experience section*/
 .work-experience-hero {
   position: sticky;
   top: 80px;
@@ -291,15 +308,27 @@ button.btn:hover {
   overflow-y: auto;
   padding-right: 15px;
   scroll-behavior: smooth;
-}
-
-.scroll-container {
   scroll-snap-type: y mandatory;
 }
 
 .scroll-container>div {
   scroll-snap-align: start;
   padding-bottom: 20px;
+}
+
+@media (max-width: 767px) {
+  .work-experience-hero {
+    position: static;
+    height: auto;
+  }
+  .work-experience-col {
+    display: none;
+  }
+  .work-experience-content {
+    width: 100% !important;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 
 /*Education page*/
@@ -314,17 +343,27 @@ button.btn:hover {
 }
 
 /*Contact page*/
+.contact-page .row {
+  gap: 0;
+}
+
 .contact-info {
   background: #fbf4ee;
   border-radius: 10px;
+}
 
-  h3 {
-    color: #ff6600;
-  }
+.contact-info h3 {
+  color: #ff6600;
 }
 
 .contact-form h3 {
   color: #333;
+}
+
+@media (max-width: 767px) {
+  .contact-info {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .success-message {
@@ -342,26 +381,27 @@ button.btn:hover {
 
 
 /*home page css*/
-/* Apply the font to your headings */
 .greeting {
   font-size: 1.2rem;
 }
 
 .web-title {
-  font-size: 9rem;
+  font-size: clamp(2.5rem, 10vw, 9rem);
   font-weight: 500;
   position: relative;
   font-family: "Monigue", sans-serif;
-  letter-spacing: 0.4rem
+  letter-spacing: 0.4rem;
+  line-height: 1.1;
 }
 
 .photo-title {
-  font-size: 9rem;
+  font-size: clamp(2.5rem, 10vw, 9rem);
   font-weight: 500;
   color: transparent;
   -webkit-text-stroke: 2px #333;
   font-family: "Monigue", sans-serif;
-  letter-spacing: 0.4rem
+  letter-spacing: 0.4rem;
+  line-height: 1.1;
 }
 
 .location {
@@ -373,9 +413,20 @@ button.btn:hover {
   text-decoration: none;
 }
 
+.hero-section {
+  padding: 2rem 1rem;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
 .skil-item {
   max-width: 250px;
-  min-width: 150px;
+  min-width: 120px;
   flex: 1;
 }
 
@@ -385,16 +436,6 @@ button.btn:hover {
   transition-duration: 0.5s;
   cursor: pointer;
   box-shadow: 0px 0px 5px 1px #fd7e14;
-}
-
-@media only screen and (min-width:321px) and (max-width:768px) {
-  .web-title {
-    font-size: 4rem;
-  }
-
-  .photo-title {
-    font-size: 4rem;
-  }
 }
 
 
